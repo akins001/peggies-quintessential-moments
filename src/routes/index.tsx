@@ -292,7 +292,7 @@ function IntroProof() {
   ];
 
   return (
-    <section className="border-b border-border bg-secondary/60">
+    <section id="about" className="scroll-mt-24 border-b border-border bg-secondary/60">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
           <div>
@@ -330,7 +330,7 @@ function IntroProof() {
 
 function Services() {
   return (
-    <section id="services" className="border-b border-border">
+    <section id="services" className="scroll-mt-24 border-b border-border">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="max-w-2xl">
           <p className="eyebrow text-accent">Service Offering</p>
@@ -362,7 +362,7 @@ function Services() {
 
 function Celebrations() {
   return (
-    <section id="celebrations" className="border-b border-border bg-espresso text-cream">
+    <section id="celebrations" className="scroll-mt-24 border-b border-border bg-espresso text-cream">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-2xl">
@@ -416,7 +416,7 @@ function Celebrations() {
 
 function Packages() {
   return (
-    <section id="packages" className="border-b border-border">
+    <section id="packages" className="scroll-mt-24 border-b border-border">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-20">
           <figure>
@@ -474,7 +474,7 @@ function Packages() {
 
 function Founder() {
   return (
-    <section id="founder" className="border-b border-border bg-secondary/60">
+    <section id="founder" className="scroll-mt-24 border-b border-border bg-secondary/60">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
@@ -527,7 +527,7 @@ function Founder() {
 
 function Contact() {
   return (
-    <section id="contact" className="border-b border-border">
+    <section id="contact" className="scroll-mt-24 border-b border-border">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
           <div>
