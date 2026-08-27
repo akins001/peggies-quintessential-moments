@@ -1,12 +1,20 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Phone, MessageCircle, MapPin, Mail, Instagram } from "lucide-react";
+import {
+  Menu,
+  X,
+  Phone,
+  MessageCircle,
+  MapPin,
+  Mail,
+  Instagram,
+  ArrowRight,
+} from "lucide-react";
 
 import heroBallroom from "@/assets/hero-ballroom.jpg";
-import portfolio1 from "@/assets/portfolio-1.jpg";
-import portfolio2 from "@/assets/portfolio-2.jpg";
-import portfolio3 from "@/assets/portfolio-3.jpg";
 import packagesArt from "@/assets/peggies-packages.jpg.asset.json";
+import { GalleryLightbox } from "@/components/GalleryLightbox";
+import { GALLERY_ITEMS, galleryAlt, getFeaturedItems } from "@/lib/gallery";
 
 const PHONE_DISPLAY = "0913 415 3272";
 const PHONE_TEL = "+2349134153272";
