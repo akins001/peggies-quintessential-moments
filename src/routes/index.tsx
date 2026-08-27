@@ -68,64 +68,6 @@ const SERVICES = [
   },
 ];
 
-/**
- * Featured celebrations.
- * Shape mirrors a future admin-managed gallery record, so this array can later be
- * replaced by data fetched from the gallery table without changing the markup.
- */
-type Celebration = {
-  id: string;
-  title: string;
-  category: string;
-  location: string;
-  image: string | null;
-};
-
-const CELEBRATIONS: Celebration[] = [
-  {
-    id: "ivory-vows",
-    title: "Ivory Vows",
-    category: "White Wedding",
-    location: "Abuja",
-    image: portfolio1,
-  },
-  {
-    id: "espresso-gala",
-    title: "The Espresso Gala",
-    category: "Gala Dinner",
-    location: "Abuja",
-    image: portfolio2,
-  },
-  {
-    id: "champagne-shower",
-    title: "Champagne Shower",
-    category: "Bridal Shower",
-    location: "Abuja",
-    image: portfolio3,
-  },
-  {
-    id: "reserved-1",
-    title: "Traditional Ceremony",
-    category: "Coming Soon",
-    location: "Abuja",
-    image: null,
-  },
-  {
-    id: "reserved-2",
-    title: "Corporate Award Night",
-    category: "Coming Soon",
-    location: "Abuja",
-    image: null,
-  },
-  {
-    id: "reserved-3",
-    title: "Milestone Birthday",
-    category: "Coming Soon",
-    location: "Abuja",
-    image: null,
-  },
-];
-
 const PACKAGES = [
   { name: "Economical", price: "₦500k", copy: "A minimalist wedding stage with standing flowers, simple curtains and a carpeted path." },
   { name: "Elegant", price: "₦850k", copy: "Full set wedding decoration with backdrop, photo booth, carpet and luxurious lighting." },
