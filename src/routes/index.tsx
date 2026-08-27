@@ -361,8 +361,15 @@ function Services() {
 }
 
 function Celebrations() {
+  const featured = getFeaturedItems(7);
+  const [active, setActive] = useState<number | null>(null);
+  const totalCount = GALLERY_ITEMS.length;
+
   return (
-    <section id="celebrations" className="scroll-mt-24 border-b border-border bg-espresso text-cream">
+    <section
+      id="celebrations"
+      className="scroll-mt-24 border-b border-border bg-espresso text-cream"
+    >
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-2xl">
@@ -372,44 +379,71 @@ function Celebrations() {
             </h2>
           </div>
           <p className="max-w-sm text-sm leading-relaxed text-cream/70">
-            A selection of recent commissions. New galleries are added as each celebration is
-            photographed.
+            A curated preview of recent commissions — the full collection of {totalCount}{" "}
+            celebrations lives in the gallery.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {CELEBRATIONS.map((item) => (
-            <figure key={item.id} className="group">
-              <div className="arch overflow-hidden border border-champagne/25 bg-cream/5">
+        {/* Compact masonry preview: only featured items render here. */}
+        <div className="mt-14 columns-2 gap-3 sm:gap-4 lg:columns-3 [&>*]:mb-3 sm:[&>*]:mb-4">
+          {featured.map((item, i) => (
+            <figure key={item.id} className="break-inside-avoid">
+              <button
+                type="button"
+                onClick={() => setActive(i)}
+                aria-label={`View ${item.title}`}
+                className="group block w-full overflow-hidden border border-champagne/25 bg-cream/5 text-left"
+              >
                 {item.image ? (
                   <img
                     src={item.image}
-                    alt={`${item.title} — ${item.category} styled by Peggies Events in ${item.location}`}
+                    alt={galleryAlt(item)}
                     width={1024}
                     height={1280}
                     loading="lazy"
-                    className="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
+                      i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
+                    }`}
                   />
                 ) : (
-                  <div className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-4 px-8 text-center">
-                    <span className="font-display text-5xl text-champagne/50">P</span>
-                    <span className="eyebrow text-champagne/70">Gallery coming soon</span>
-                    <span className="text-xs leading-relaxed text-cream/50">
-                      Photography from this celebration will be published here.
-                    </span>
-                  </div>
+                  <span className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-2 px-6 text-center">
+                    <span className="font-display text-4xl text-champagne/50">P</span>
+                    <span className="eyebrow text-champagne/70">Coming soon</span>
+                  </span>
                 )}
-              </div>
-              <figcaption className="mt-5">
-                <h3 className="font-display text-2xl text-cream">{item.title}</h3>
-                <p className="eyebrow mt-2 text-champagne/80">
-                  {item.category} &middot; {item.location}
-                </p>
-              </figcaption>
+                <span className="block px-3 py-3">
+                  <span className="block truncate font-display text-lg text-cream sm:text-xl">
+                    {item.title}
+                  </span>
+                  <span className="eyebrow mt-1 block truncate text-champagne/70">
+                    {item.category}
+                  </span>
+                </span>
+              </button>
             </figure>
           ))}
         </div>
+
+        <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+          <Link
+            to="/gallery"
+            className="inline-flex w-full items-center justify-center gap-2 bg-accent px-8 py-4 text-xs tracking-[0.22em] uppercase text-accent-foreground transition-opacity hover:opacity-90 sm:w-auto"
+          >
+            View full gallery
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
+          <p className="text-xs tracking-[0.14em] uppercase text-cream/50">
+            {totalCount} celebrations &amp; growing
+          </p>
+        </div>
       </div>
+
+      <GalleryLightbox
+        items={featured}
+        index={active}
+        onClose={() => setActive(null)}
+        onChange={setActive}
+      />
     </section>
   );
 }
