@@ -12,13 +12,16 @@ import {
 } from "lucide-react";
 
 import heroBallroom from "@/assets/hero-ballroom.jpg";
-import packagesArt from "@/assets/peggies-packages.jpg.asset.json";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GALLERY_ITEMS, galleryAlt, getFeaturedItems } from "@/lib/gallery";
 
 const PHONE_DISPLAY = "0913 415 3272";
 const PHONE_TEL = "+2349134153272";
-const WHATSAPP = "https://wa.me/2349134153272?text=Hello%20Peggies%20Events%2C%20I%27d%20like%20to%20discuss%20an%20event.";
+const WHATSAPP_MESSAGE = `Hello Peggies Events,
+I’m interested in your event planning and decoration services.
+Please send me your packages, pricing, and consultation details.
+Thank you.`;
+const WHATSAPP = `https://wa.me/2349134153272?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 const NAV = [
   { label: "About", href: "#about" },
@@ -69,10 +72,22 @@ const SERVICES = [
 ];
 
 const PACKAGES = [
-  { name: "Economical", price: "₦500k", copy: "A minimalist wedding stage with standing flowers, simple curtains and a carpeted path." },
-  { name: "Elegant", price: "₦850k", copy: "Full set wedding decoration with backdrop, photo booth, carpet and luxurious lighting." },
-  { name: "Premium", price: "₦2M", copy: "Complete decoration from ceremony to reception with fresh flowers and artistic lighting." },
-  { name: "Intimate Wedding", price: "₦5M", copy: "Elevated design for a small family wedding: stage, backdrop, entrance and photo booth." },
+  {
+    name: "Economical",
+    copy: "A minimalist wedding stage with standing flowers, simple curtains and a carpeted path.",
+  },
+  {
+    name: "Elegant",
+    copy: "Full set wedding decoration with backdrop, photo booth, carpet and luxurious lighting.",
+  },
+  {
+    name: "Premium",
+    copy: "Complete decoration from ceremony to reception with fresh flowers and artistic lighting.",
+  },
+  {
+    name: "Intimate Wedding",
+    copy: "Elevated design for a small family wedding: stage, backdrop, entrance and photo booth.",
+  },
 ];
 
 export const Route = createFileRoute("/")({
@@ -199,7 +214,10 @@ function Hero() {
       />
       <div className="absolute inset-0 bg-espresso/70" />
       <div className="relative mx-auto flex min-h-[88vh] max-w-4xl flex-col items-center justify-center px-5 py-24 text-center">
-        <p className="eyebrow text-champagne">Peggies Exclusive Events &middot; Abuja, Nigeria</p>
+        <p className="eyebrow text-champagne">
+          Peggies Exclusive Events
+          <span className="mt-2 block">Abuja, Nigeria</span>
+        </p>
         <div className="rule-gold mt-6 h-px w-24" />
         <h1 className="mt-8 font-display text-4xl leading-[1.08] text-cream sm:text-6xl lg:text-7xl">
           Crafting Quintessential,
@@ -246,9 +264,9 @@ function IntroProof() {
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
           <div>
-            <p className="eyebrow text-muted-foreground">The House of Peggies</p>
+            <p className="eyebrow text-muted-foreground">Peggies Events</p>
             <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-              Luxurious decor, thoughtfully composed — and honestly priced.
+              Exquisite décor designed to create memories for a lifetime.
             </h2>
           </div>
           <div className="space-y-6 text-base leading-relaxed text-muted-foreground">
@@ -283,12 +301,12 @@ function Services() {
     <section id="services" className="scroll-mt-24 border-b border-border">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="max-w-2xl">
-          <p className="eyebrow text-accent">Service Offering</p>
+          <p className="eyebrow text-accent">SERVICE OFFERING</p>
           <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-            Everything the occasion asks for.
+            Tailored to every occasion.
           </h2>
           <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-            Engage us for the full production or for a single, beautifully executed element.
+            Engage us for full production or for a single, beautifully executed decoration package.
           </p>
         </div>
 
@@ -400,56 +418,47 @@ function Celebrations() {
 
 function Packages() {
   return (
-    <section id="packages" className="scroll-mt-24 border-b border-border">
+    <section id="packages" className="scroll-mt-24 border-b border-border bg-secondary/40">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-        <div className="grid gap-14 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-20">
-          <figure>
-            <img
-              src={packagesArt.url}
-              alt="Peggies Events package card listing the Economical, Elegant, Premium and Intimate Wedding decoration packages"
-              loading="lazy"
-              className="w-full border border-border shadow-[0_24px_60px_-30px_oklch(0.29_0.045_45/0.5)]"
-            />
-            <figcaption className="eyebrow mt-4 text-muted-foreground">
-              Current decoration packages
-            </figcaption>
-          </figure>
+        <div className="max-w-2xl">
+          <p className="eyebrow text-accent">PACKAGES</p>
+          <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
+            Let&rsquo;s make magic together.
+          </h2>
+          <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+            Each package is a starting point! Every detail is tailored to your venue, guest count and
+            palette. Detailed proposals are prepared on request.
+          </p>
+        </div>
 
-          <div>
-            <p className="eyebrow text-accent">Packages</p>
-            <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-              Four ways to begin.
-            </h2>
-            <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-              Each package is a starting point — every detail is tailored to your venue, guest count
-              and palette. Bespoke proposals are prepared on request.
-            </p>
+        <ul className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2">
+          {PACKAGES.map((p, i) => (
+            <li key={p.name} className="flex flex-col bg-card p-8 lg:p-10">
+              <span className="font-display text-sm text-accent">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h3 className="mt-4 font-display text-2xl text-primary lg:text-3xl">
+                {p.name} Package
+              </h3>
+              <div className="rule-gold mt-5 h-px w-14" />
+              <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{p.copy}</p>
+            </li>
+          ))}
+        </ul>
 
-            <ul className="mt-10 divide-y divide-border border-y border-border">
-              {PACKAGES.map((p) => (
-                <li
-                  key={p.name}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-6 py-6"
-                >
-                  <div className="min-w-0">
-                    <h3 className="font-display text-2xl text-primary">{p.name} Package</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.copy}</p>
-                  </div>
-                  <span className="shrink-0 font-display text-2xl text-accent">{p.price}</span>
-                </li>
-              ))}
-            </ul>
-
-            <a
-              href={WHATSAPP}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-10 inline-flex items-center gap-2 bg-primary px-8 py-4 text-xs tracking-[0.22em] uppercase text-primary-foreground transition-opacity hover:opacity-90"
-            >
-              <MessageCircle className="h-4 w-4" aria-hidden="true" />
-              Request a quote
-            </a>
-          </div>
+        <div className="mt-12 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
+          <a
+            href={WHATSAPP}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex w-full items-center justify-center gap-2 bg-primary px-8 py-4 text-xs tracking-[0.22em] uppercase text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto"
+          >
+            <MessageCircle className="h-4 w-4" aria-hidden="true" />
+            Request a proposal
+          </a>
+          <p className="text-sm text-muted-foreground">
+            Detailed proposals are prepared on request.
+          </p>
         </div>
       </div>
     </section>
@@ -500,7 +509,7 @@ function Founder() {
               </p>
             </div>
             <p className="mt-10 font-display text-2xl italic leading-snug text-primary">
-              &ldquo;Luxurious decor, affordable prices — and a memory you keep for life.&rdquo;
+              &ldquo;Exquisite d&eacute;cor designed to create memories for a lifetime.&rdquo;
             </p>
           </div>
         </div>
