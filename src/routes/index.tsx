@@ -302,12 +302,12 @@ function Services() {
     <section id="services" className="scroll-mt-24 border-b border-border">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="max-w-2xl">
-          <p className="eyebrow text-accent">Service Offering</p>
+          <p className="eyebrow text-accent">SERVICE OFFERING</p>
           <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-            Everything the occasion asks for.
+            Tailored to every occasion.
           </h2>
           <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-            Engage us for the full production or for a single, beautifully executed element.
+            Engage us for full production or for a single, beautifully executed decoration package.
           </p>
         </div>
 
