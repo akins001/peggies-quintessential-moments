@@ -13,7 +13,10 @@ import {
 
 import heroBallroom from "@/assets/hero-ballroom.jpg";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
-import { GALLERY_ITEMS, galleryAlt, getFeaturedItems } from "@/lib/gallery";
+import { useQuery } from "@tanstack/react-query";
+
+import { galleryAlt } from "@/lib/gallery";
+import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
 const PHONE_TEL = "+2349134153272";
