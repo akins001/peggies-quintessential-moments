@@ -332,9 +332,16 @@ function Services() {
 }
 
 function Celebrations() {
-  const featured = getFeaturedItems(7);
+  const { data: all = [] } = useQuery({
+    queryKey: ["public-gallery"],
+    queryFn: fetchPublicGallery,
+  });
+  const featured = (all.filter((i) => i.featured).length > 0
+    ? all.filter((i) => i.featured)
+    : all
+  ).slice(0, 7);
   const [active, setActive] = useState<number | null>(null);
-  const totalCount = GALLERY_ITEMS.length;
+  const totalCount = all.length;
 
   return (
     <section
