@@ -21,6 +21,7 @@ import {
   removePortfolioImage,
   uploadPortfolioImage,
   type AdminGalleryItem,
+  type GalleryRow,
 } from "@/lib/gallery-data";
 
 export const Route = createFileRoute("/admin/")({
@@ -117,7 +118,7 @@ function AdminDashboard() {
     }
   }
 
-  async function patchItem(item: AdminGalleryItem, patch: Record<string, unknown>) {
+  async function patchItem(item: AdminGalleryItem, patch: Partial<Pick<GalleryRow, "title" | "category" | "featured" | "active" | "sort_order">>) {
     setBusyId(item.id);
     const { error } = await supabase.from("gallery_items").update(patch).eq("id", item.id);
     setBusyId(null);
