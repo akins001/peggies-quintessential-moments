@@ -69,10 +69,22 @@ const SERVICES = [
 ];
 
 const PACKAGES = [
-  { name: "Economical", price: "₦500k", copy: "A minimalist wedding stage with standing flowers, simple curtains and a carpeted path." },
-  { name: "Elegant", price: "₦850k", copy: "Full set wedding decoration with backdrop, photo booth, carpet and luxurious lighting." },
-  { name: "Premium", price: "₦2M", copy: "Complete decoration from ceremony to reception with fresh flowers and artistic lighting." },
-  { name: "Intimate Wedding", price: "₦5M", copy: "Elevated design for a small family wedding: stage, backdrop, entrance and photo booth." },
+  {
+    name: "Economical",
+    copy: "A minimalist wedding stage with standing flowers, simple curtains and a carpeted path.",
+  },
+  {
+    name: "Elegant",
+    copy: "Full set wedding decoration with backdrop, photo booth, carpet and luxurious lighting.",
+  },
+  {
+    name: "Premium",
+    copy: "Complete decoration from ceremony to reception with fresh flowers and artistic lighting.",
+  },
+  {
+    name: "Intimate Wedding",
+    copy: "Elevated design for a small family wedding: stage, backdrop, entrance and photo booth.",
+  },
 ];
 
 export const Route = createFileRoute("/")({
