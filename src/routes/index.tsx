@@ -215,7 +215,10 @@ function Hero() {
       />
       <div className="absolute inset-0 bg-espresso/70" />
       <div className="relative mx-auto flex min-h-[88vh] max-w-4xl flex-col items-center justify-center px-5 py-24 text-center">
-        <p className="eyebrow text-champagne">Peggies Exclusive Events &middot; Abuja, Nigeria</p>
+        <p className="eyebrow text-champagne">
+          Peggies Exclusive Events
+          <span className="mt-2 block">Abuja, Nigeria</span>
+        </p>
         <div className="rule-gold mt-6 h-px w-24" />
         <h1 className="mt-8 font-display text-4xl leading-[1.08] text-cream sm:text-6xl lg:text-7xl">
           Crafting Quintessential,
