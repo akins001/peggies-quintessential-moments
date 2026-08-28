@@ -31,7 +31,6 @@ function NotFoundComponent() {
           </Link>
         </div>
       </div>
-      <Toaster />
     </div>
   );
 }
@@ -70,7 +69,6 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
           </a>
         </div>
       </div>
-      <Toaster />
     </div>
   );
 }
@@ -119,7 +117,6 @@ function RootShell({ children }: { children: ReactNode }) {
         {children}
         <Scripts />
       </body>
-      <Toaster />
     </html>
   );
 }
