@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 
 import heroBallroom from "@/assets/hero-ballroom.jpg";
-import packagesArt from "@/assets/peggies-packages.jpg.asset.json";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GALLERY_ITEMS, galleryAlt, getFeaturedItems } from "@/lib/gallery";
 
@@ -510,7 +509,7 @@ function Founder() {
               </p>
             </div>
             <p className="mt-10 font-display text-2xl italic leading-snug text-primary">
-              &ldquo;Luxurious decor, affordable prices — and a memory you keep for life.&rdquo;
+              &ldquo;Exquisite d&eacute;cor designed to create memories for a lifetime.&rdquo;
             </p>
           </div>
         </div>
