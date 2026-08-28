@@ -3,7 +3,10 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
-import { GALLERY_CATEGORIES, galleryAlt, getAllItems, type GalleryCategory } from "@/lib/gallery";
+import { useQuery } from "@tanstack/react-query";
+
+import { GALLERY_CATEGORIES, galleryAlt, type GalleryCategory } from "@/lib/gallery";
+import { fetchPublicGallery } from "@/lib/gallery-data";
 
 const WHATSAPP =
   "https://wa.me/2349134153272?text=Hello%20Peggies%20Events%2C%20I%27d%20like%20to%20discuss%20an%20event.";
@@ -31,7 +34,10 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function GalleryPage() {
-  const all = useMemo(() => getAllItems(), []);
+  const { data: all = [] } = useQuery({
+    queryKey: ["public-gallery"],
+    queryFn: fetchPublicGallery,
+  });
   const [filter, setFilter] = useState<GalleryCategory | "All">("All");
   const [active, setActive] = useState<number | null>(null);
 

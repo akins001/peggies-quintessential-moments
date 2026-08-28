@@ -476,12 +476,21 @@ function Packages() {
 }
 
 function Founder() {
+  const { data: headshot } = useQuery({ queryKey: ["headshot"], queryFn: fetchHeadshot });
   return (
     <section id="founder" className="scroll-mt-24 border-b border-border bg-secondary/60">
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
-            {/* Headshot placeholder — swap this block for an <img> of Peggy Adugba. */}
+            {headshot?.url ? (
+              <div className="arch relative mx-auto aspect-[4/5] w-full max-w-sm overflow-hidden border border-accent/40 bg-cream">
+                <img
+                  src={headshot.url}
+                  alt="Peggy Adugba, founder and lead designer of Peggies Events"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ) : (
             <div className="arch relative mx-auto flex aspect-[4/5] w-full max-w-sm flex-col items-center justify-center gap-4 border border-accent/40 bg-cream px-8 text-center">
               <span className="font-display text-6xl text-accent/60">PA</span>
               <span className="eyebrow text-muted-foreground">Portrait coming soon</span>
@@ -490,6 +499,7 @@ function Founder() {
               </span>
               <span className="rule-gold absolute bottom-8 left-1/2 h-px w-16 -translate-x-1/2" />
             </div>
+            )}
           </div>
 
           <div>
