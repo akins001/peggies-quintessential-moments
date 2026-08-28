@@ -265,9 +265,9 @@ function IntroProof() {
       <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
           <div>
-            <p className="eyebrow text-muted-foreground">The House of Peggies</p>
+            <p className="eyebrow text-muted-foreground">Peggies Events</p>
             <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-              Luxurious decor, thoughtfully composed — and honestly priced.
+              Exquisite décor designed to create memories for a lifetime.
             </h2>
           </div>
           <div className="space-y-6 text-base leading-relaxed text-muted-foreground">
