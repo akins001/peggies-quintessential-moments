@@ -18,7 +18,11 @@ import { GALLERY_ITEMS, galleryAlt, getFeaturedItems } from "@/lib/gallery";
 
 const PHONE_DISPLAY = "0913 415 3272";
 const PHONE_TEL = "+2349134153272";
-const WHATSAPP = "https://wa.me/2349134153272?text=Hello%20Peggies%20Events%2C%20I%27d%20like%20to%20discuss%20an%20event.";
+const WHATSAPP_MESSAGE = `Hello Peggies Events,
+I’m interested in your event planning and decoration services.
+Please send me your packages, pricing, and consultation details.
+Thank you.`;
+const WHATSAPP = `https://wa.me/2349134153272?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
 const NAV = [
   { label: "About", href: "#about" },
