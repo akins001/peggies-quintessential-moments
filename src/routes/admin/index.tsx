@@ -129,6 +129,14 @@ function AdminDashboard() {
     });
   }
 
+  /**
+   * Upload new gallery images.
+   *
+   * IMPORTANT:
+   * title is explicitly set to an empty string.
+   * This prevents the database default from using
+   * the uploaded filename as the title/caption.
+   */
   async function handleUpload(files: FileList | null) {
     if (!files || files.length === 0) return;
 
@@ -148,9 +156,7 @@ function AdminDashboard() {
         const { error } = await supabase
           .from("gallery_items")
           .insert({
-            // Caption is intentionally empty by default.
-            // The filename is NOT used as the caption.
-           // title: "",
+            title: "",
             category: "Weddings",
             location: "Abuja",
             image_path: path,
@@ -159,7 +165,9 @@ function AdminDashboard() {
             sort_order: nextOrder,
           });
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
       }
 
       toast.success(
@@ -178,13 +186,20 @@ function AdminDashboard() {
     }
   }
 
+  /**
+   * Update gallery item.
+   *
+   * title is included here so captions can be:
+   * - added
+   * - changed
+   * - completely cleared
+   */
   async function patchItem(
     item: AdminGalleryItem,
     patch: Partial<
       Pick<
         GalleryRow,
-      //  "title" | 
-    "category" | "featured" | "active" | "sort_order"
+        "title" | "category" | "featured" | "active" | "sort_order"
       >
     >
   ) {
@@ -262,7 +277,9 @@ function AdminDashboard() {
         })
         .eq("id", target.id);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       await removePortfolioImage(target.image_path);
 
@@ -340,7 +357,9 @@ function AdminDashboard() {
           }
         );
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       await removePortfolioImage(previous);
 
@@ -646,8 +665,16 @@ function AdminDashboard() {
                             const value =
                               e.target.value.trim();
 
-                            // Allows the caption to be completely
-                            // cleared and saved as an empty string.
+                            /*
+                             * This intentionally allows
+                             * value to be an empty string.
+                             *
+                             * Example:
+                             * "Wedding in Abuja"
+                             * -> user deletes it
+                             * -> ""
+                             * -> saved to Supabase
+                             */
                             if (
                               value !==
                               (item.title ?? "")
@@ -842,4 +869,4 @@ function AdminDashboard() {
     </div>
   );
 }
-```
+
