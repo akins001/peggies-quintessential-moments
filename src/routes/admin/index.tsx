@@ -150,7 +150,7 @@ function AdminDashboard() {
           .insert({
             // Caption is intentionally empty by default.
             // The filename is NOT used as the caption.
-            title: "",
+           // title: "",
             category: "Weddings",
             location: "Abuja",
             image_path: path,
@@ -183,7 +183,8 @@ function AdminDashboard() {
     patch: Partial<
       Pick<
         GalleryRow,
-        "title" | "category" | "featured" | "active" | "sort_order"
+      //  "title" | 
+    "category" | "featured" | "active" | "sort_order"
       >
     >
   ) {
