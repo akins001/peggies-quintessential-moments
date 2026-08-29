@@ -26,9 +26,13 @@ import {
 
 export const Route = createFileRoute("/admin/")({
   ssr: false,
+
   beforeLoad: async () => {
     const { data, error } = await supabase.auth.getUser();
-    if (error || !data.user) throw redirect({ to: "/admin/login" });
+
+    if (error || !data.user) {
+      throw redirect({ to: "/admin/login" });
+    }
 
     const { data: isAdmin } = await supabase.rpc("has_role", {
       _user_id: data.user.id,
@@ -51,10 +55,14 @@ export const Route = createFileRoute("/admin/")({
         content:
           "Manage the Peggies Events portfolio gallery, featured selections and founder portrait.",
       },
-      { property: "og:title", content: "Studio Dashboard | Peggies Events" },
+      {
+        property: "og:title",
+        content: "Studio Dashboard | Peggies Events",
+      },
       {
         property: "og:description",
-        content: "Manage the Peggies Events portfolio gallery and founder portrait.",
+        content:
+          "Manage the Peggies Events portfolio gallery and founder portrait.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -140,7 +148,8 @@ function AdminDashboard() {
         const { error } = await supabase
           .from("gallery_items")
           .insert({
-            // Caption/title is optional.
+            // Caption is intentionally empty by default.
+            // The filename is NOT used as the caption.
             title: "",
             category: "Weddings",
             location: "Abuja",
@@ -636,6 +645,8 @@ function AdminDashboard() {
                             const value =
                               e.target.value.trim();
 
+                            // Allows the caption to be completely
+                            // cleared and saved as an empty string.
                             if (
                               value !==
                               (item.title ?? "")
