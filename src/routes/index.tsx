@@ -369,7 +369,7 @@ function Celebrations() {
               <button
                 type="button"
                 onClick={() => setActive(i)}
-                aria-label={`View ${item.title}`}
+                aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
                 className="group block w-full overflow-hidden border border-champagne/25 bg-cream/5 text-left"
               >
                 {item.image ? (
@@ -390,10 +390,12 @@ function Celebrations() {
                   </span>
                 )}
                 <span className="block px-3 py-3">
-                  <span className="block truncate font-display text-lg text-cream sm:text-xl">
-                    {item.title}
-                  </span>
-                  <span className="eyebrow mt-1 block truncate text-champagne/70">
+                  {item.title ? (
+                    <span className="block truncate font-display text-lg text-cream sm:text-xl">
+                      {item.title}
+                    </span>
+                  ) : null}
+                  <span className="eyebrow block truncate text-champagne/70">
                     {item.category}
                   </span>
                 </span>

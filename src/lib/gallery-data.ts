@@ -36,7 +36,7 @@ async function signPaths(paths: string[]): Promise<Record<string, string>> {
 function toGalleryItem(row: GalleryRow, urls: Record<string, string>): GalleryItem {
   return {
     id: row.id,
-    title: row.title,
+    title: row.title && row.title.trim() !== "" ? row.title : null,
     category: row.category as GalleryCategory,
     location: row.location,
     image: row.image_path ? (urls[row.image_path] ?? null) : null,

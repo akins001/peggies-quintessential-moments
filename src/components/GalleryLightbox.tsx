@@ -47,13 +47,15 @@ export function GalleryLightbox({ items, index, onClose, onChange }: Props) {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`${item.title} — image ${index + 1} of ${items.length}`}
+      aria-label={`${item.title || "Portfolio image"} — image ${index + 1} of ${items.length}`}
       className="fixed inset-0 z-[100] flex flex-col bg-espresso/97 backdrop-blur-sm"
     >
       <div className="flex items-center justify-between gap-4 border-b border-champagne/15 px-4 py-3 sm:px-6">
         <div className="min-w-0">
-          <p className="truncate font-display text-xl text-cream sm:text-2xl">{item.title}</p>
-          <p className="eyebrow mt-1 truncate text-champagne/70">
+          {item.title ? (
+            <p className="truncate font-display text-xl text-cream sm:text-2xl">{item.title}</p>
+          ) : null}
+          <p className="eyebrow truncate text-champagne/70">
             {item.category} &middot; {item.location}
           </p>
         </div>
