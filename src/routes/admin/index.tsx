@@ -213,12 +213,65 @@ function AdminDashboard() {
     setBusyId(null);
 
     if (error) {
+      if (
+        error.message.includes(
+          "FEATURED_LIMIT_REACHED"
+        )
+      ) {
+        toast.error(FEATURED_LIMIT_MESSAGE);
+        refresh();
+        return;
+      }
+
       toast.error("Could not save that change.");
       return;
     }
 
     refresh();
   }
+
+  /**
+   * Featured toggle.
+   *
+   * Unfeaturing is always permitted. Featuring is
+   * verified against the live database count first,
+   * and the database trigger is the final authority.
+   */
+  async function toggleFeatured(
+    item: AdminGalleryItem
+  ) {
+    if (item.featured) {
+      await patchItem(item, { featured: false });
+      return;
+    }
+
+    setBusyId(item.id);
+
+    const { count, error } = await supabase
+      .from("gallery_items")
+      .select("id", {
+        count: "exact",
+        head: true,
+      })
+      .eq("featured", true)
+      .eq("active", true);
+
+    setBusyId(null);
+
+    if (error) {
+      toast.error("Could not save that change.");
+      return;
+    }
+
+    if ((count ?? 0) >= FEATURED_LIMIT) {
+      toast.error(FEATURED_LIMIT_MESSAGE);
+      refresh();
+      return;
+    }
+
+    await patchItem(item, { featured: true });
+  }
+
 
   async function move(
     item: AdminGalleryItem,
