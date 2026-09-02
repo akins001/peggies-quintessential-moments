@@ -640,7 +640,7 @@ function AdminDashboard() {
                           alt={
                             item.title
                               ? `${item.title} — ${item.category}`
-                              : item.category
+                              : "Peggies Events portfolio image"
                           }
                           className="h-full w-full object-cover"
                           loading="lazy"
