@@ -26,7 +26,8 @@ export type GalleryCategory =
 
 export type GalleryItem = {
   id: string;
-  title: string;
+  /** Optional caption. Null/empty when the admin left it blank. */
+  title: string | null;
   category: GalleryCategory;
   location: string;
   /** Null until photography for this celebration is published. */
@@ -86,6 +87,8 @@ export function getAllItems(): GalleryItem[] {
   return [...GALLERY_ITEMS].sort(bySort);
 }
 
+/** Accessible alt text; never shows a filename or generic visible title. */
 export function galleryAlt(item: GalleryItem): string {
+  if (!item.title || item.title.trim() === "") return "Peggies Events portfolio image";
   return `${item.title} — ${item.category} styled by Peggies Events in ${item.location}`;
 }

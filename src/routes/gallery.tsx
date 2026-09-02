@@ -132,10 +132,12 @@ function GalleryPage() {
                   </span>
                 )}
                 <span className="block px-3 py-3">
-                  <span className="block truncate font-display text-lg text-primary">
-                    {item.title}
-                  </span>
-                  <span className="eyebrow mt-1 block truncate text-muted-foreground">
+                  {item.title ? (
+                    <span className="block truncate font-display text-lg text-primary">
+                      {item.title}
+                    </span>
+                  ) : null}
+                  <span className="eyebrow block truncate text-muted-foreground">
                     {item.category}
                   </span>
                 </span>
