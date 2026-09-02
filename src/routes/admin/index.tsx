@@ -103,6 +103,10 @@ function AdminDashboard() {
     (i) => i.featured && i.active
   ).length;
 
+  const featuredLimitReached =
+    featuredCount >= FEATURED_LIMIT;
+
+
   function refresh() {
     void queryClient.invalidateQueries({
       queryKey: ["admin-gallery"],
