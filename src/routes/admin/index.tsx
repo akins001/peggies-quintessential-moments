@@ -73,6 +73,13 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
+/** Maximum number of published images that can be featured on the homepage. */
+const FEATURED_LIMIT = 8;
+
+const FEATURED_LIMIT_MESSAGE =
+  "Featured limit reached. You can have a maximum of 8 featured images. Please remove one of the current featured images before adding another.";
+
+
 function AdminDashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
