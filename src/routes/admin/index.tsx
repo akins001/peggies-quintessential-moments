@@ -848,32 +848,53 @@ function AdminDashboard() {
                         </button>
                       </div>
 
-                      <button
-                        type="button"
-                        disabled={
-                          busyId === item.id
-                        }
-                        onClick={() =>
-                          void patchItem(item, {
-                            featured:
-                              !item.featured,
-                          })
-                        }
-                        className="inline-flex w-full items-center gap-2 border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.16em] uppercase text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
-                      >
-                        <Star
-                          className={
-                            item.featured
-                              ? "h-3.5 w-3.5 fill-accent text-accent"
-                              : "h-3.5 w-3.5"
-                          }
-                          aria-hidden="true"
-                        />
+                      {(() => {
+                        const blocked =
+                          !item.featured &&
+                          featuredLimitReached;
 
-                        {item.featured
-                          ? "Unfeature"
-                          : "Feature"}
-                      </button>
+                        return (
+                          <button
+                            type="button"
+                            disabled={
+                              busyId === item.id ||
+                              blocked
+                            }
+                            aria-disabled={
+                              blocked || undefined
+                            }
+                            title={
+                              blocked
+                                ? FEATURED_LIMIT_MESSAGE
+                                : undefined
+                            }
+                            onClick={() => {
+                              if (blocked) {
+                                toast.error(
+                                  FEATURED_LIMIT_MESSAGE
+                                );
+                                return;
+                              }
+                              void toggleFeatured(item);
+                            }}
+                            className="inline-flex w-full items-center gap-2 border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.16em] uppercase text-muted-foreground transition-colors hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <Star
+                              className={
+                                item.featured
+                                  ? "h-3.5 w-3.5 fill-accent text-accent"
+                                  : "h-3.5 w-3.5"
+                              }
+                              aria-hidden="true"
+                            />
+
+                            {item.featured
+                              ? "Unfeature"
+                              : "Feature"}
+                          </button>
+                        );
+                      })()}
+
 
                       <button
                         type="button"
