@@ -623,10 +623,21 @@ function AdminDashboard() {
                 Gallery images
               </h2>
 
-              <p className="mt-3 text-sm text-muted-foreground">
-                {items.length} total &middot;{" "}
-                {featuredCount} featured on the homepage
+              <p
+                className="mt-3 text-sm text-muted-foreground"
+                aria-live="polite"
+              >
+                {items.length} total &middot; Featured:{" "}
+                {featuredCount} / {FEATURED_LIMIT}
               </p>
+
+              {featuredLimitReached && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Featured limit reached — unfeature an
+                  image to add another.
+                </p>
+              )}
+
             </div>
 
             <div>
