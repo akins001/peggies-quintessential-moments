@@ -73,6 +73,13 @@ export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
 });
 
+/** Maximum number of published images that can be featured on the homepage. */
+const FEATURED_LIMIT = 8;
+
+const FEATURED_LIMIT_MESSAGE =
+  "Featured limit reached. You can have a maximum of 8 featured images. Please remove one of the current featured images before adding another.";
+
+
 function AdminDashboard() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -102,6 +109,10 @@ function AdminDashboard() {
   const featuredCount = items.filter(
     (i) => i.featured && i.active
   ).length;
+
+  const featuredLimitReached =
+    featuredCount >= FEATURED_LIMIT;
+
 
   function refresh() {
     void queryClient.invalidateQueries({
@@ -213,12 +224,65 @@ function AdminDashboard() {
     setBusyId(null);
 
     if (error) {
+      if (
+        error.message.includes(
+          "FEATURED_LIMIT_REACHED"
+        )
+      ) {
+        toast.error(FEATURED_LIMIT_MESSAGE);
+        refresh();
+        return;
+      }
+
       toast.error("Could not save that change.");
       return;
     }
 
     refresh();
   }
+
+  /**
+   * Featured toggle.
+   *
+   * Unfeaturing is always permitted. Featuring is
+   * verified against the live database count first,
+   * and the database trigger is the final authority.
+   */
+  async function toggleFeatured(
+    item: AdminGalleryItem
+  ) {
+    if (item.featured) {
+      await patchItem(item, { featured: false });
+      return;
+    }
+
+    setBusyId(item.id);
+
+    const { count, error } = await supabase
+      .from("gallery_items")
+      .select("id", {
+        count: "exact",
+        head: true,
+      })
+      .eq("featured", true)
+      .eq("active", true);
+
+    setBusyId(null);
+
+    if (error) {
+      toast.error("Could not save that change.");
+      return;
+    }
+
+    if ((count ?? 0) >= FEATURED_LIMIT) {
+      toast.error(FEATURED_LIMIT_MESSAGE);
+      refresh();
+      return;
+    }
+
+    await patchItem(item, { featured: true });
+  }
+
 
   async function move(
     item: AdminGalleryItem,
@@ -559,10 +623,21 @@ function AdminDashboard() {
                 Gallery images
               </h2>
 
-              <p className="mt-3 text-sm text-muted-foreground">
-                {items.length} total &middot;{" "}
-                {featuredCount} featured on the homepage
+              <p
+                className="mt-3 text-sm text-muted-foreground"
+                aria-live="polite"
+              >
+                {items.length} total &middot; Featured:{" "}
+                {featuredCount} / {FEATURED_LIMIT}
               </p>
+
+              {featuredLimitReached && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Featured limit reached — unfeature an
+                  image to add another.
+                </p>
+              )}
+
             </div>
 
             <div>
@@ -784,32 +859,53 @@ function AdminDashboard() {
                         </button>
                       </div>
 
-                      <button
-                        type="button"
-                        disabled={
-                          busyId === item.id
-                        }
-                        onClick={() =>
-                          void patchItem(item, {
-                            featured:
-                              !item.featured,
-                          })
-                        }
-                        className="inline-flex w-full items-center gap-2 border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.16em] uppercase text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
-                      >
-                        <Star
-                          className={
-                            item.featured
-                              ? "h-3.5 w-3.5 fill-accent text-accent"
-                              : "h-3.5 w-3.5"
-                          }
-                          aria-hidden="true"
-                        />
+                      {(() => {
+                        const blocked =
+                          !item.featured &&
+                          featuredLimitReached;
 
-                        {item.featured
-                          ? "Unfeature"
-                          : "Feature"}
-                      </button>
+                        return (
+                          <button
+                            type="button"
+                            disabled={
+                              busyId === item.id ||
+                              blocked
+                            }
+                            aria-disabled={
+                              blocked || undefined
+                            }
+                            title={
+                              blocked
+                                ? FEATURED_LIMIT_MESSAGE
+                                : undefined
+                            }
+                            onClick={() => {
+                              if (blocked) {
+                                toast.error(
+                                  FEATURED_LIMIT_MESSAGE
+                                );
+                                return;
+                              }
+                              void toggleFeatured(item);
+                            }}
+                            className="inline-flex w-full items-center gap-2 border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.16em] uppercase text-muted-foreground transition-colors hover:text-primary disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            <Star
+                              className={
+                                item.featured
+                                  ? "h-3.5 w-3.5 fill-accent text-accent"
+                                  : "h-3.5 w-3.5"
+                              }
+                              aria-hidden="true"
+                            />
+
+                            {item.featured
+                              ? "Unfeature"
+                              : "Feature"}
+                          </button>
+                        );
+                      })()}
+
 
                       <button
                         type="button"
