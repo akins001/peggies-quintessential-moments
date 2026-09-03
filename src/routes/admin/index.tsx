@@ -4,7 +4,10 @@ import { useRef, useState } from "react";
 import {
   ArrowDown,
   ArrowUp,
+  Eye,
+  EyeOff,
   ImagePlus,
+  Images,
   Loader2,
   LogOut,
   Star,
@@ -23,6 +26,12 @@ import {
   type AdminGalleryItem,
   type GalleryRow,
 } from "@/lib/gallery-data";
+import {
+  fetchAdminHeroSlides,
+  removeHeroImage,
+  uploadHeroImage,
+  type AdminHeroSlide,
+} from "@/lib/hero-data";
 
 export const Route = createFileRoute("/admin/")({
   ssr: false,
@@ -90,9 +99,16 @@ function AdminDashboard() {
   const uploadRef = useRef<HTMLInputElement>(null);
   const replaceRef = useRef<HTMLInputElement>(null);
   const headshotRef = useRef<HTMLInputElement>(null);
+  const heroUploadRef = useRef<HTMLInputElement>(null);
+  const heroReplaceRef = useRef<HTMLInputElement>(null);
 
   const [replaceTarget, setReplaceTarget] =
     useState<AdminGalleryItem | null>(null);
+
+  const [heroBusyId, setHeroBusyId] = useState<string | null>(null);
+  const [heroUploading, setHeroUploading] = useState(false);
+  const [heroReplaceTarget, setHeroReplaceTarget] =
+    useState<AdminHeroSlide | null>(null);
 
   const gallery = useQuery({
     queryKey: ["admin-gallery"],
@@ -103,6 +119,13 @@ function AdminDashboard() {
     queryKey: ["headshot"],
     queryFn: fetchHeadshot,
   });
+
+  const heroSlides = useQuery({
+    queryKey: ["admin-hero-slides"],
+    queryFn: fetchAdminHeroSlides,
+  });
+
+  const heroItems = heroSlides.data ?? [];
 
   const items = gallery.data ?? [];
 
@@ -125,6 +148,17 @@ function AdminDashboard() {
 
     void queryClient.invalidateQueries({
       queryKey: ["headshot"],
+    });
+  }
+
+  function refreshHero() {
+    void queryClient.invalidateQueries({
+      queryKey: ["admin-hero-slides"],
+    });
+
+    // Public homepage slideshow query key — see src/lib/hero-data.ts consumer.
+    void queryClient.invalidateQueries({
+      queryKey: ["hero-slides"],
     });
   }
 
@@ -484,6 +518,166 @@ function AdminDashboard() {
     refresh();
   }
 
+  /** Upload one or more hero background images. New slides start hidden. */
+  async function handleHeroUpload(files: FileList | null) {
+    if (!files || files.length === 0) return;
+
+    setHeroUploading(true);
+
+    let nextOrder = heroItems.reduce(
+      (max, s) => Math.max(max, s.sort_order),
+      0
+    );
+
+    try {
+      for (const file of Array.from(files)) {
+        const path = await uploadHeroImage(file);
+
+        nextOrder += 10;
+
+        const { error } = await supabase.from("hero_slides").insert({
+          image_path: path,
+          active: true,
+          sort_order: nextOrder,
+        });
+
+        if (error) {
+          throw error;
+        }
+      }
+
+      toast.success(
+        `${files.length} hero image${files.length === 1 ? "" : "s"} uploaded.`
+      );
+
+      refreshHero();
+    } catch {
+      toast.error("Upload failed. Please try again.");
+    } finally {
+      setHeroUploading(false);
+
+      if (heroUploadRef.current) {
+        heroUploadRef.current.value = "";
+      }
+    }
+  }
+
+  async function toggleHeroActive(slide: AdminHeroSlide) {
+    setHeroBusyId(slide.id);
+
+    const { error } = await supabase
+      .from("hero_slides")
+      .update({ active: !slide.active })
+      .eq("id", slide.id);
+
+    setHeroBusyId(null);
+
+    if (error) {
+      toast.error("Could not save that change.");
+      return;
+    }
+
+    refreshHero();
+  }
+
+  async function moveHero(slide: AdminHeroSlide, direction: -1 | 1) {
+    const index = heroItems.findIndex((s) => s.id === slide.id);
+    const swapWith = heroItems[index + direction];
+
+    if (!swapWith) return;
+
+    setHeroBusyId(slide.id);
+
+    const a = supabase
+      .from("hero_slides")
+      .update({ sort_order: swapWith.sort_order })
+      .eq("id", slide.id);
+
+    const b = supabase
+      .from("hero_slides")
+      .update({ sort_order: slide.sort_order })
+      .eq("id", swapWith.id);
+
+    const [r1, r2] = await Promise.all([a, b]);
+
+    setHeroBusyId(null);
+
+    if (r1.error || r2.error) {
+      toast.error("Could not reorder the slideshow.");
+      return;
+    }
+
+    refreshHero();
+  }
+
+  async function handleHeroReplace(files: FileList | null) {
+    const target = heroReplaceTarget;
+
+    if (!files || files.length === 0 || !target) return;
+
+    setHeroBusyId(target.id);
+
+    try {
+      const path = await uploadHeroImage(files[0]!);
+
+      const { error } = await supabase
+        .from("hero_slides")
+        .update({ image_path: path })
+        .eq("id", target.id);
+
+      if (error) {
+        throw error;
+      }
+
+      await removeHeroImage(target.image_path);
+
+      toast.success("Hero image replaced.");
+
+      refreshHero();
+    } catch {
+      toast.error("Could not replace that image.");
+    } finally {
+      setHeroBusyId(null);
+      setHeroReplaceTarget(null);
+
+      if (heroReplaceRef.current) {
+        heroReplaceRef.current.value = "";
+      }
+    }
+  }
+
+  async function handleHeroDelete(slide: AdminHeroSlide) {
+    if (
+      !window.confirm(
+        "Delete this hero slideshow image? This cannot be undone."
+      )
+    ) {
+      return;
+    }
+
+    setHeroBusyId(slide.id);
+
+    const { error } = await supabase
+      .from("hero_slides")
+      .delete()
+      .eq("id", slide.id);
+
+    if (!error) {
+      await removeHeroImage(slide.image_path);
+    }
+
+    setHeroBusyId(null);
+
+    if (error) {
+      toast.error("Could not delete that image.");
+      return;
+    }
+
+    toast.success("Hero image deleted.");
+
+    refreshHero();
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur">
@@ -603,6 +797,179 @@ function AdminDashboard() {
               />
             </div>
           </div>
+        </section>
+
+        {/* Hero slideshow */}
+        <section aria-labelledby="hero-heading" className="mt-16">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow text-accent">Homepage Hero</p>
+
+              <h2
+                id="hero-heading"
+                className="mt-4 font-display text-3xl leading-tight"
+              >
+                Hero background slideshow
+              </h2>
+
+              <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                Images published here rotate behind the homepage hero text.
+                With no published image, the site shows the default
+                background. With one, it displays as a static image. With two
+                or more, they crossfade automatically every few seconds. These
+                are separate from the Portfolio gallery below.
+              </p>
+            </div>
+
+            <div>
+              <button
+                type="button"
+                disabled={heroUploading}
+                onClick={() => heroUploadRef.current?.click()}
+                className="inline-flex items-center gap-2 bg-accent px-6 py-3.5 text-[0.6875rem] tracking-[0.18em] uppercase text-accent-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+              >
+                {heroUploading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+                ) : (
+                  <Images className="h-4 w-4" aria-hidden="true" />
+                )}
+                Upload hero images
+              </button>
+
+              <input
+                ref={heroUploadRef}
+                type="file"
+                accept="image/*"
+                multiple
+                className="sr-only"
+                onChange={(e) => void handleHeroUpload(e.target.files)}
+              />
+
+              <input
+                ref={heroReplaceRef}
+                type="file"
+                accept="image/*"
+                className="sr-only"
+                onChange={(e) => void handleHeroReplace(e.target.files)}
+              />
+            </div>
+          </div>
+
+          {heroSlides.isLoading ? (
+            <p className="mt-10 text-sm text-muted-foreground">
+              Loading hero slideshow&hellip;
+            </p>
+          ) : heroItems.length === 0 ? (
+            <p className="mt-10 border border-dashed border-border p-10 text-center text-sm leading-relaxed text-muted-foreground">
+              No hero images yet. Upload one or more photos above — until
+              then the site shows the default hero background.
+            </p>
+          ) : (
+            <ul className="mt-10 space-y-4">
+              {heroItems.map((slide, index) => (
+                <li
+                  key={slide.id}
+                  className="grid gap-5 border border-border bg-card p-4 sm:grid-cols-[7rem_minmax(0,1fr)_auto]"
+                >
+                  <div className="aspect-video w-full overflow-hidden border border-border bg-secondary sm:aspect-[4/5] sm:w-28">
+                    {slide.url ? (
+                      <img
+                        src={slide.url}
+                        alt="Hero slideshow image"
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center text-xs text-muted-foreground">
+                        No image
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="min-w-0 space-y-3">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="eyebrow text-muted-foreground">
+                        Position {index + 1} of {heroItems.length}
+                      </span>
+
+                      <span
+                        className={
+                          slide.active
+                            ? "border border-accent/50 px-2.5 py-1 text-[0.625rem] tracking-[0.18em] uppercase text-accent"
+                            : "border border-border px-2.5 py-1 text-[0.625rem] tracking-[0.18em] uppercase text-muted-foreground"
+                        }
+                      >
+                        {slide.active ? "Published" : "Hidden"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-start gap-2 sm:flex-col">
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        disabled={index === 0 || heroBusyId === slide.id}
+                        onClick={() => void moveHero(slide, -1)}
+                        aria-label="Move hero image earlier"
+                        className="border border-border p-2.5 text-muted-foreground transition-colors hover:text-primary disabled:opacity-40"
+                      >
+                        <ArrowUp className="h-4 w-4" aria-hidden="true" />
+                      </button>
+
+                      <button
+                        type="button"
+                        disabled={
+                          index === heroItems.length - 1 ||
+                          heroBusyId === slide.id
+                        }
+                        onClick={() => void moveHero(slide, 1)}
+                        aria-label="Move hero image later"
+                        className="border border-border p-2.5 text-muted-foreground transition-colors hover:text-primary disabled:opacity-40"
+                      >
+                        <ArrowDown className="h-4 w-4" aria-hidden="true" />
+                      </button>
+                    </div>
+
+                    <button
+                      type="button"
+                      disabled={heroBusyId === slide.id}
+                      onClick={() => void toggleHeroActive(slide)}
+                      className="inline-flex w-full items-center gap-2 border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.16em] uppercase text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
+                    >
+                      {slide.active ? (
+                        <EyeOff className="h-3.5 w-3.5" aria-hidden="true" />
+                      ) : (
+                        <Eye className="h-3.5 w-3.5" aria-hidden="true" />
+                      )}
+                      {slide.active ? "Hide" : "Publish"}
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={heroBusyId === slide.id}
+                      onClick={() => {
+                        setHeroReplaceTarget(slide);
+                        heroReplaceRef.current?.click();
+                      }}
+                      className="w-full border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.18em] uppercase text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
+                    >
+                      Replace image
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={heroBusyId === slide.id}
+                      onClick={() => void handleHeroDelete(slide)}
+                      className="inline-flex w-full items-center gap-2 border border-border px-3 py-2.5 text-[0.625rem] tracking-[0.16em] uppercase text-destructive transition-colors hover:bg-destructive/10 disabled:opacity-50"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
         {/* Gallery */}
