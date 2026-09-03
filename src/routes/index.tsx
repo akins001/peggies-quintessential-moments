@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
+import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { HeroSlideshow } from "@/components/HeroSlideshow";
 import { useQuery } from "@tanstack/react-query";
 
@@ -343,7 +344,9 @@ function Celebrations() {
                 type="button"
                 onClick={() => setActive(i)}
                 aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
-                className="group block w-full overflow-hidden border border-champagne/25 bg-cream/5 text-left"
+                className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 text-left ${
+                  i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
+                }`}
               >
                 {item.image ? (
                   <img
@@ -352,26 +355,19 @@ function Celebrations() {
                     width={1024}
                     height={1280}
                     loading="lazy"
-                    className={`w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
-                      i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
-                    }`}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                 ) : (
-                  <span className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-2 px-6 text-center">
+                  <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
                     <span className="font-display text-4xl text-champagne/50">P</span>
                     <span className="eyebrow text-champagne/70">Coming soon</span>
                   </span>
                 )}
-                <span className="block px-3 py-3">
-                  {item.title ? (
-                    <span className="block truncate font-display text-lg text-cream sm:text-xl">
-                      {item.title}
-                    </span>
-                  ) : null}
-                  <span className="eyebrow block truncate text-champagne/70">
-                    {item.category}
-                  </span>
-                </span>
+
+                {/* Caption overlay: hidden by default, fades in on hover/focus.
+                    Always shown at reduced opacity on touch devices (no hover), so
+                    the title stays accessible without an interaction. */}
+                <GalleryCaptionOverlay title={item.title} category={item.category} />
               </button>
             </figure>
           ))}

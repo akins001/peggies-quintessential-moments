@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
+import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { useQuery } from "@tanstack/react-query";
 
 import { GALLERY_CATEGORIES, galleryAlt, type GalleryCategory } from "@/lib/gallery";
@@ -135,17 +136,7 @@ function GalleryPage() {
                 {/* Caption overlay: hidden by default, fades in on hover/focus.
                     Always shown at reduced opacity on touch devices (no hover), so
                     the title stays accessible without an interaction. */}
-                <span
-                  className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/90 via-espresso/40 to-transparent px-3 pb-3 pt-8 opacity-100 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 sm:opacity-0"
-                  aria-hidden={!item.title}
-                >
-                  {item.title ? (
-                    <span className="block truncate font-display text-lg text-cream">
-                      {item.title}
-                    </span>
-                  ) : null}
-                  <span className="eyebrow block truncate text-cream/70">{item.category}</span>
-                </span>
+                <GalleryCaptionOverlay title={item.title} category={item.category} />
               </button>
             </li>
           ))}
