@@ -114,7 +114,7 @@ function GalleryPage() {
               <button
                 type="button"
                 onClick={() => setActive(i)}
-                className="group block w-full overflow-hidden border border-border bg-secondary/60 text-left"
+                className="group relative block aspect-[4/5] w-full overflow-hidden border border-border bg-secondary/60 text-left"
               >
                 {item.image ? (
                   <img
@@ -123,23 +123,28 @@ function GalleryPage() {
                     width={1024}
                     height={1280}
                     loading="lazy"
-                    className="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                 ) : (
-                  <span className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-2 px-4 text-center">
+                  <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-4 text-center">
                     <span className="font-display text-4xl text-accent/50">P</span>
                     <span className="eyebrow text-muted-foreground">Coming soon</span>
                   </span>
                 )}
-                <span className="block px-3 py-3">
+
+                {/* Caption overlay: hidden by default, fades in on hover/focus.
+                    Always shown at reduced opacity on touch devices (no hover), so
+                    the title stays accessible without an interaction. */}
+                <span
+                  className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-espresso/90 via-espresso/40 to-transparent px-3 pb-3 pt-8 opacity-100 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 sm:opacity-0"
+                  aria-hidden={!item.title}
+                >
                   {item.title ? (
-                    <span className="block truncate font-display text-lg text-primary">
+                    <span className="block truncate font-display text-lg text-cream">
                       {item.title}
                     </span>
                   ) : null}
-                  <span className="eyebrow block truncate text-muted-foreground">
-                    {item.category}
-                  </span>
+                  <span className="eyebrow block truncate text-cream/70">{item.category}</span>
                 </span>
               </button>
             </li>

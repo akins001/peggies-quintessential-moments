@@ -11,8 +11,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-import heroBallroom from "@/assets/hero-ballroom.jpg";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
+import { HeroSlideshow } from "@/components/HeroSlideshow";
 import { useQuery } from "@tanstack/react-query";
 
 import { galleryAlt } from "@/lib/gallery";
@@ -30,7 +30,6 @@ const NAV = [
   { label: "About", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Celebrations", href: "#celebrations" },
-  { label: "Packages", href: "#packages" },
   { label: "Founder", href: "#founder" },
   { label: "Contact", href: "#contact" },
 ];
@@ -74,25 +73,6 @@ const SERVICES = [
   },
 ];
 
-const PACKAGES = [
-  {
-    name: "Economical",
-    copy: "A minimalist wedding stage with standing flowers, simple curtains and a carpeted path.",
-  },
-  {
-    name: "Elegant",
-    copy: "Full set wedding decoration with backdrop, photo booth, carpet and luxurious lighting.",
-  },
-  {
-    name: "Premium",
-    copy: "Complete decoration from ceremony to reception with fresh flowers and artistic lighting.",
-  },
-  {
-    name: "Intimate Wedding",
-    copy: "Elevated design for a small family wedding: stage, backdrop, entrance and photo booth.",
-  },
-];
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -124,7 +104,6 @@ function Home() {
         <IntroProof />
         <Services />
         <Celebrations />
-        <Packages />
         <Founder />
         <Contact />
       </main>
@@ -208,13 +187,7 @@ function SiteNav() {
 function Hero() {
   return (
     <section id="top" className="relative isolate">
-      <img
-        src={heroBallroom}
-        alt="Cream and gold draped ballroom with chandeliers and floral centrepieces styled by Peggies Events"
-        width={1920}
-        height={1280}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      <HeroSlideshow />
       <div className="absolute inset-0 bg-espresso/70" />
       <div className="relative mx-auto flex min-h-[88vh] max-w-4xl flex-col items-center justify-center px-5 py-24 text-center">
         <p className="eyebrow text-champagne">
@@ -424,55 +397,6 @@ function Celebrations() {
         onClose={() => setActive(null)}
         onChange={setActive}
       />
-    </section>
-  );
-}
-
-function Packages() {
-  return (
-    <section id="packages" className="scroll-mt-24 border-b border-border bg-secondary/40">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
-        <div className="max-w-2xl">
-          <p className="eyebrow text-accent">PACKAGES</p>
-          <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
-            Let&rsquo;s make magic together.
-          </h2>
-          <p className="mt-6 text-base leading-relaxed text-muted-foreground">
-            Each package is a starting point! Every detail is tailored to your venue, guest count and
-            palette. Detailed proposals are prepared on request.
-          </p>
-        </div>
-
-        <ul className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2">
-          {PACKAGES.map((p, i) => (
-            <li key={p.name} className="flex flex-col bg-card p-8 lg:p-10">
-              <span className="font-display text-sm text-accent">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-4 font-display text-2xl text-primary lg:text-3xl">
-                {p.name} Package
-              </h3>
-              <div className="rule-gold mt-5 h-px w-14" />
-              <p className="mt-5 text-sm leading-relaxed text-muted-foreground">{p.copy}</p>
-            </li>
-          ))}
-        </ul>
-
-        <div className="mt-12 flex flex-col items-start gap-5 sm:flex-row sm:items-center">
-          <a
-            href={WHATSAPP}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 bg-primary px-8 py-4 text-xs tracking-[0.22em] uppercase text-primary-foreground transition-opacity hover:opacity-90 sm:w-auto"
-          >
-            <MessageCircle className="h-4 w-4" aria-hidden="true" />
-            Request a proposal
-          </a>
-          <p className="text-sm text-muted-foreground">
-            Detailed proposals are prepared on request.
-          </p>
-        </div>
-      </div>
     </section>
   );
 }
