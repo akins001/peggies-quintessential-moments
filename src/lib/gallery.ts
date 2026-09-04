@@ -92,3 +92,25 @@ export function galleryAlt(item: GalleryItem): string {
   if (!item.title || item.title.trim() === "") return "Peggies Events portfolio image";
   return `${item.title} — ${item.category} styled by Peggies Events in ${item.location}`;
 }
+
+/**
+ * A small rotating set of aspect ratios for the portfolio-style masonry grids
+ * (Featured Celebrations on the homepage, the full /gallery). Cycling through
+ * a handful of ratios — rather than one uniform size or a simple two-way
+ * alternation — gives the grid an organic, editorial rhythm instead of rows
+ * of identically-sized boxes lined up in lockstep, while staying tidy since
+ * every tile still fits one of a small, deliberate set of shapes.
+ */
+const PORTFOLIO_ASPECTS = [
+  "aspect-[4/5]",
+  "aspect-square",
+  "aspect-[3/4]",
+  "aspect-[6/7]",
+  "aspect-square",
+  "aspect-[4/5]",
+  "aspect-[5/6]",
+] as const;
+
+export function portfolioAspect(i: number): string {
+  return PORTFOLIO_ASPECTS[i % PORTFOLIO_ASPECTS.length] ?? PORTFOLIO_ASPECTS[0];
+}

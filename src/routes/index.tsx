@@ -18,7 +18,7 @@ import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { galleryAlt } from "@/lib/gallery";
+import { galleryAlt, portfolioAspect } from "@/lib/gallery";
 import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
@@ -353,9 +353,9 @@ function Celebrations() {
                   type="button"
                   onClick={() => handleTap(item.id, () => setActive(i))}
                   aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
-                  className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 shadow-[0_18px_45px_-22px_rgba(0,0,0,0.6)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-champagne/50 hover:shadow-[0_28px_60px_-20px_rgba(0,0,0,0.7)] text-left ${
-                    i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
-                  }`}
+                  className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 shadow-[0_18px_45px_-22px_rgba(0,0,0,0.6)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-champagne/50 hover:shadow-[0_28px_60px_-20px_rgba(0,0,0,0.7)] text-left ${portfolioAspect(
+                    i
+                  )}`}
                 >
                   {item.image ? (
                     <img
