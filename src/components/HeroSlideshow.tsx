@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import { fetchPublicHeroSlides } from "@/lib/hero-data";
+import { fetchPublicHeroSlides, type HeroSlide } from "@/lib/hero-data";
 
 /** Time each slide stays on screen before crossfading to the next. */
 const SLIDE_INTERVAL_MS = 4500;
+
+type Props = {
+  /**
+   * Slides resolved server-side (see the `/` route's loader) so the very
+   * first HTML the browser paints already has the real image in it — no
+   * client-side fetch delay, and so no placeholder state to flash before it.
+   */
+  initialSlides: HeroSlide[];
+};
 
 /**
  * Full-background hero slideshow, built entirely from images published in
@@ -14,20 +23,23 @@ const SLIDE_INTERVAL_MS = 4500;
  * looks intentional rather than broken.
  *
  * - No published hero images -> a quiet espresso/champagne gradient.
- * - Exactly one published image -> fades in over the gradient once loaded, static after that.
- * - Two or more -> once loaded, auto-advancing crossfade every ~4.5s.
+ * - Exactly one published image -> shown immediately, static.
+ * - Two or more -> auto-advancing crossfade every ~4.5s, from the first paint.
  *
- * Every published slide is preloaded as soon as its URL is known, so the
- * first paint and every later crossfade in the rotation are ready to
- * display instantly rather than waiting on a network round trip.
+ * `initialSlides` seeds the query so there is no loading state on mount; the
+ * query only re-runs in the background (e.g. on revisit) to pick up changes
+ * made in the Admin Dashboard since the page first loaded. Every slide is
+ * also preloaded as soon as its URL is known, so later crossfades in the
+ * rotation don't hit a network delay either.
  *
  * Images come exclusively from Supabase (`hero_slides` table + `hero-slides`
  * storage bucket) and are never mixed with the portfolio Gallery images.
  */
-export function HeroSlideshow() {
-  const { data: slides = [] } = useQuery({
+export function HeroSlideshow({ initialSlides }: Props) {
+  const { data: slides = initialSlides } = useQuery({
     queryKey: ["hero-slides"],
     queryFn: fetchPublicHeroSlides,
+    initialData: initialSlides,
     staleTime: 5 * 60 * 1000,
   });
 

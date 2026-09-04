@@ -40,22 +40,30 @@ async function signPaths(paths: string[]): Promise<Record<string, string>> {
 
 /**
  * Published hero slides for the public homepage, in display order.
- * Returns an empty array when nothing has been published — the Hero
- * component falls back to the existing static background in that case.
+ * Returns an empty array when nothing has been published, and also on any
+ * failure (missing credentials, network error, etc.) — this runs inside the
+ * `/` route's server loader, so it must never throw and take the whole
+ * homepage down with it. The Hero component falls back to a plain gradient
+ * whenever this comes back empty.
  */
 export async function fetchPublicHeroSlides(): Promise<HeroSlide[]> {
-  const { data, error } = await supabase
-    .from("hero_slides")
-    .select("id, image_path, active, sort_order")
-    .eq("active", true)
-    .order("sort_order", { ascending: true });
+  try {
+    const { data, error } = await supabase
+      .from("hero_slides")
+      .select("id, image_path, active, sort_order")
+      .eq("active", true)
+      .order("sort_order", { ascending: true });
 
-  if (error || !data || data.length === 0) return [];
-  const rows = data as HeroSlideRow[];
-  const urls = await signPaths(rows.map((r) => r.image_path));
-  return rows
-    .map((row) => ({ id: row.id, url: urls[row.image_path] ?? null }))
-    .filter((slide): slide is HeroSlide => Boolean(slide.url));
+    if (error || !data || data.length === 0) return [];
+    const rows = data as HeroSlideRow[];
+    const urls = await signPaths(rows.map((r) => r.image_path));
+    return rows
+      .map((row) => ({ id: row.id, url: urls[row.image_path] ?? null }))
+      .filter((slide): slide is HeroSlide => Boolean(slide.url));
+  } catch (err) {
+    console.error("[hero-data] fetchPublicHeroSlides failed", err);
+    return [];
+  }
 }
 
 /** Every hero slide, published or not — admin dashboard only (RLS restricts this read). */
