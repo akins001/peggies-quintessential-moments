@@ -4,6 +4,7 @@ import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
+import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
@@ -74,14 +75,16 @@ function GalleryPage() {
       </header>
 
       <main className="mx-auto max-w-7xl px-5 py-14 lg:px-8 lg:py-20">
-        <p className="eyebrow text-accent">The Full Portfolio</p>
-        <h1 className="mt-6 max-w-3xl font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
-          Every celebration, in cream, gold and candlelight.
-        </h1>
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Select an image to view it full-screen and move through the collection. New galleries are
-          published as each celebration is photographed.
-        </p>
+        <Reveal>
+          <p className="eyebrow text-accent">The Full Portfolio</p>
+          <h1 className="mt-6 max-w-3xl font-display text-4xl leading-tight sm:text-5xl lg:text-6xl">
+            Every celebration, in cream, gold and candlelight.
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">
+            Select an image to view it full-screen and move through the collection. New galleries are
+            published as each celebration is photographed.
+          </p>
+        </Reveal>
 
         <div className="mt-10 flex flex-wrap gap-2" role="group" aria-label="Filter by category">
           {filters.map((f) => {
@@ -114,43 +117,45 @@ function GalleryPage() {
         <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
           {items.map((item, i) => (
             <li key={item.id}>
-              <button
-                type="button"
-                onClick={() => handleTap(item.id, () => setActive(i))}
-                className="group relative block aspect-[4/5] w-full overflow-hidden border border-border bg-secondary/60 text-left"
-              >
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={galleryAlt(item)}
-                    width={1024}
-                    height={1280}
-                    loading="lazy"
-                    className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
-                      revealedId === item.id ? "scale-[1.04]" : ""
-                    }`}
-                  />
-                ) : (
-                  <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-4 text-center">
-                    <span className="font-display text-4xl text-accent/50">P</span>
-                    <span className="eyebrow text-muted-foreground">Coming soon</span>
-                  </span>
-                )}
+              <Reveal delay={Math.min(i * 50, 400)}>
+                <button
+                  type="button"
+                  onClick={() => handleTap(item.id, () => setActive(i))}
+                  className="group relative block aspect-[4/5] w-full overflow-hidden border border-border bg-secondary/60 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.5)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_26px_55px_-20px_rgba(0,0,0,0.6)] text-left"
+                >
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={galleryAlt(item)}
+                      width={1024}
+                      height={1280}
+                      loading="lazy"
+                      className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
+                        revealedId === item.id ? "scale-[1.04]" : ""
+                      }`}
+                    />
+                  ) : (
+                    <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-4 text-center">
+                      <span className="font-display text-4xl text-accent/50">P</span>
+                      <span className="eyebrow text-muted-foreground">Coming soon</span>
+                    </span>
+                  )}
 
-                {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
-                    or on a first tap that reveals it before a second tap opens the
-                    lightbox (touch devices — see useTapReveal). */}
-                <GalleryCaptionOverlay
-                  title={item.title}
-                  category={item.category}
-                  revealed={revealedId === item.id}
-                />
-              </button>
+                  {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
+                      or on a first tap that reveals it before a second tap opens the
+                      lightbox (touch devices — see useTapReveal). */}
+                  <GalleryCaptionOverlay
+                    title={item.title}
+                    category={item.category}
+                    revealed={revealedId === item.id}
+                  />
+                </button>
+              </Reveal>
             </li>
           ))}
         </ul>
 
-        <div className="mt-16 border-t border-border pt-12">
+        <Reveal className="mt-16 border-t border-border pt-12">
           <h2 className="font-display text-2xl text-primary sm:text-3xl">
             Ready to design yours?
           </h2>
@@ -163,7 +168,7 @@ function GalleryPage() {
             <MessageCircle className="h-4 w-4" aria-hidden="true" />
             Book a consultation
           </a>
-        </div>
+        </Reveal>
       </main>
 
       <GalleryLightbox items={items} index={active} onClose={() => setActive(null)} onChange={setActive} />

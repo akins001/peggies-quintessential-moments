@@ -15,7 +15,11 @@ const FALLBACK_ALT =
  *
  * - No published hero images -> the existing static ballroom photo (site never breaks).
  * - Exactly one published image -> shown as a plain static background, no animation.
- * - Two or more -> auto-advancing, smooth crossfade every ~4.5s.
+ * - Two or more -> auto-advancing, smooth crossfade every ~4.5s, starting the moment
+ *   the page loads (no interaction needed).
+ *
+ * Every state carries a slow, continuous Ken Burns zoom so the background never
+ * feels static, even before the first crossfade.
  *
  * Images come exclusively from the Admin Dashboard's hero slideshow manager
  * (Supabase `hero_slides` table + `hero-slides` storage bucket) and are never
@@ -45,25 +49,29 @@ export function HeroSlideshow() {
 
   if (slides.length === 0) {
     return (
-      <img
-        src={heroBallroom}
-        alt={FALLBACK_ALT}
-        width={1920}
-        height={1280}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      <div className="absolute inset-0 h-full w-full overflow-hidden">
+        <img
+          src={heroBallroom}
+          alt={FALLBACK_ALT}
+          width={1920}
+          height={1280}
+          className="animate-ken-burns h-full w-full object-cover"
+        />
+      </div>
     );
   }
 
   if (slides.length === 1) {
     return (
-      <img
-        src={slides[0]!.url}
-        alt=""
-        width={1920}
-        height={1280}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
+      <div className="absolute inset-0 h-full w-full overflow-hidden">
+        <img
+          src={slides[0]!.url}
+          alt=""
+          width={1920}
+          height={1280}
+          className="animate-ken-burns h-full w-full object-cover"
+        />
+      </div>
     );
   }
 
@@ -76,7 +84,7 @@ export function HeroSlideshow() {
           alt=""
           width={1920}
           height={1280}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out ${
+          className={`animate-ken-burns absolute inset-0 h-full w-full object-cover transition-opacity duration-[1500ms] ease-in-out ${
             i === active ? "opacity-100" : "opacity-0"
           }`}
         />

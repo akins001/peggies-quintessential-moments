@@ -14,6 +14,7 @@ import {
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { HeroSlideshow } from "@/components/HeroSlideshow";
+import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
@@ -239,7 +240,7 @@ function IntroProof() {
 
   return (
     <section id="about" className="scroll-mt-24 border-b border-border bg-secondary/60">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <Reveal className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:gap-20">
           <div>
             <p className="eyebrow text-muted-foreground">Peggies Events</p>
@@ -269,7 +270,7 @@ function IntroProof() {
             </div>
           ))}
         </dl>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -277,7 +278,7 @@ function IntroProof() {
 function Services() {
   return (
     <section id="services" className="scroll-mt-24 border-b border-border">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <Reveal className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="max-w-2xl">
           <p className="eyebrow text-accent">SERVICE OFFERING</p>
           <h2 className="mt-6 font-display text-3xl leading-tight sm:text-4xl lg:text-5xl">
@@ -290,18 +291,23 @@ function Services() {
 
         <ul className="mt-14 grid gap-px border border-border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {SERVICES.map((service, i) => (
-            <li key={service.title} className="bg-card p-8 transition-colors hover:bg-secondary/70">
-              <span className="font-display text-sm text-accent">
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <h3 className="mt-4 font-display text-2xl leading-snug text-primary">
-                {service.title}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{service.copy}</p>
+            <li key={service.title}>
+              <Reveal
+                delay={Math.min(i * 70, 350)}
+                className="h-full bg-card p-8 transition-colors hover:bg-secondary/70"
+              >
+                <span className="font-display text-sm text-accent">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-4 font-display text-2xl leading-snug text-primary">
+                  {service.title}
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{service.copy}</p>
+              </Reveal>
             </li>
           ))}
         </ul>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -324,7 +330,7 @@ function Celebrations() {
       id="celebrations"
       className="scroll-mt-24 border-b border-border bg-espresso text-cream"
     >
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <Reveal className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow text-champagne">Featured Celebrations</p>
@@ -339,44 +345,46 @@ function Celebrations() {
         </div>
 
         {/* Compact masonry preview: only featured items render here. */}
-        <div className="mt-14 columns-2 gap-3 sm:gap-4 lg:columns-3 [&>*]:mb-3 sm:[&>*]:mb-4">
+        <div className="mt-14 columns-2 gap-4 sm:gap-5 lg:columns-3 [&>*]:mb-4 sm:[&>*]:mb-5">
           {featured.map((item, i) => (
             <figure key={item.id} className="break-inside-avoid">
-              <button
-                type="button"
-                onClick={() => handleTap(item.id, () => setActive(i))}
-                aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
-                className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 text-left ${
-                  i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
-                }`}
-              >
-                {item.image ? (
-                  <img
-                    src={item.image}
-                    alt={galleryAlt(item)}
-                    width={1024}
-                    height={1280}
-                    loading="lazy"
-                    className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
-                      revealedId === item.id ? "scale-[1.04]" : ""
-                    }`}
-                  />
-                ) : (
-                  <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
-                    <span className="font-display text-4xl text-champagne/50">P</span>
-                    <span className="eyebrow text-champagne/70">Coming soon</span>
-                  </span>
-                )}
+              <Reveal delay={Math.min(i * 70, 350)}>
+                <button
+                  type="button"
+                  onClick={() => handleTap(item.id, () => setActive(i))}
+                  aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
+                  className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 shadow-[0_18px_45px_-22px_rgba(0,0,0,0.6)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-champagne/50 hover:shadow-[0_28px_60px_-20px_rgba(0,0,0,0.7)] text-left ${
+                    i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
+                  }`}
+                >
+                  {item.image ? (
+                    <img
+                      src={item.image}
+                      alt={galleryAlt(item)}
+                      width={1024}
+                      height={1280}
+                      loading="lazy"
+                      className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
+                        revealedId === item.id ? "scale-[1.04]" : ""
+                      }`}
+                    />
+                  ) : (
+                    <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
+                      <span className="font-display text-4xl text-champagne/50">P</span>
+                      <span className="eyebrow text-champagne/70">Coming soon</span>
+                    </span>
+                  )}
 
-                {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
-                    or on a first tap that reveals it before a second tap opens the
-                    lightbox (touch devices — see useTapReveal). */}
-                <GalleryCaptionOverlay
-                  title={item.title}
-                  category={item.category}
-                  revealed={revealedId === item.id}
-                />
-              </button>
+                  {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
+                      or on a first tap that reveals it before a second tap opens the
+                      lightbox (touch devices — see useTapReveal). */}
+                  <GalleryCaptionOverlay
+                    title={item.title}
+                    category={item.category}
+                    revealed={revealedId === item.id}
+                  />
+                </button>
+              </Reveal>
             </figure>
           ))}
         </div>
@@ -393,7 +401,7 @@ function Celebrations() {
             {totalCount} celebrations &amp; growing
           </p>
         </div>
-      </div>
+      </Reveal>
 
       <GalleryLightbox
         items={featured}
@@ -409,7 +417,7 @@ function Founder() {
   const { data: headshot } = useQuery({ queryKey: ["headshot"], queryFn: fetchHeadshot });
   return (
     <section id="founder" className="scroll-mt-24 border-b border-border bg-secondary/60">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <Reveal className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
             {headshot?.url ? (
@@ -463,7 +471,7 @@ function Founder() {
             </p>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -471,7 +479,7 @@ function Founder() {
 function Contact() {
   return (
     <section id="contact" className="scroll-mt-24 border-b border-border">
-      <div className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
+      <Reveal className="mx-auto max-w-7xl px-5 py-20 lg:px-8 lg:py-28">
         <div className="grid gap-14 lg:grid-cols-2 lg:gap-20">
           <div>
             <p className="eyebrow text-accent">Bookings</p>
@@ -535,7 +543,7 @@ function Contact() {
             </div>
           </dl>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 }

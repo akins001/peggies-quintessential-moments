@@ -194,3 +194,25 @@
 @utility arch {
   border-radius: 9999px 9999px 0.35rem 0.35rem;
 }
+
+/* Slow, continuous zoom for the hero background — begins immediately on
+   mount so the slideshow always feels alive, even before the first
+   crossfade. Paused for anyone who prefers reduced motion. */
+@keyframes ken-burns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+@utility animate-ken-burns {
+  animation: ken-burns 9s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ken-burns {
+    animation: none;
+  }
+}
