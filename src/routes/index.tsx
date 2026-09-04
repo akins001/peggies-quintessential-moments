@@ -14,6 +14,7 @@ import {
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { HeroSlideshow } from "@/components/HeroSlideshow";
+import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
 import { galleryAlt } from "@/lib/gallery";
@@ -315,6 +316,7 @@ function Celebrations() {
     : all
   ).slice(0, 7);
   const [active, setActive] = useState<number | null>(null);
+  const { revealedId, handleTap } = useTapReveal();
   const totalCount = all.length;
 
   return (
@@ -342,7 +344,7 @@ function Celebrations() {
             <figure key={item.id} className="break-inside-avoid">
               <button
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => handleTap(item.id, () => setActive(i))}
                 aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
                 className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 text-left ${
                   i % 3 === 0 ? "aspect-[4/5]" : "aspect-square"
@@ -355,7 +357,9 @@ function Celebrations() {
                     width={1024}
                     height={1280}
                     loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
+                      revealedId === item.id ? "scale-[1.04]" : ""
+                    }`}
                   />
                 ) : (
                   <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
@@ -364,10 +368,14 @@ function Celebrations() {
                   </span>
                 )}
 
-                {/* Caption overlay: hidden by default, fades in on hover/focus.
-                    Always shown at reduced opacity on touch devices (no hover), so
-                    the title stays accessible without an interaction. */}
-                <GalleryCaptionOverlay title={item.title} category={item.category} />
+                {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
+                    or on a first tap that reveals it before a second tap opens the
+                    lightbox (touch devices — see useTapReveal). */}
+                <GalleryCaptionOverlay
+                  title={item.title}
+                  category={item.category}
+                  revealed={revealedId === item.id}
+                />
               </button>
             </figure>
           ))}
