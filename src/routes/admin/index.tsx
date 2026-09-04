@@ -518,7 +518,7 @@ function AdminDashboard() {
     refresh();
   }
 
-  /** Upload one or more hero background images. New slides start hidden. */
+  /** Upload one or more hero background images. New slides are published immediately. */
   async function handleHeroUpload(files: FileList | null) {
     if (!files || files.length === 0) return;
 
@@ -814,10 +814,11 @@ function AdminDashboard() {
 
               <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
                 Images published here rotate behind the homepage hero text.
-                With no published image, the site shows the default
-                background. With one, it displays as a static image. With two
-                or more, they crossfade automatically every few seconds. These
-                are separate from the Portfolio gallery below.
+                With no published image, the hero shows a plain brand-toned
+                background — no stock photo. With one, it displays as a
+                static image. With two or more, they crossfade automatically
+                every few seconds. These are separate from the Portfolio
+                gallery below.
               </p>
             </div>
 
@@ -862,7 +863,7 @@ function AdminDashboard() {
           ) : heroItems.length === 0 ? (
             <p className="mt-10 border border-dashed border-border p-10 text-center text-sm leading-relaxed text-muted-foreground">
               No hero images yet. Upload one or more photos above — until
-              then the site shows the default hero background.
+              then the homepage hero shows a plain brand-toned background.
             </p>
           ) : (
             <ul className="mt-10 space-y-4">

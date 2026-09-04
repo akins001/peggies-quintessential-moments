@@ -1,37 +1,28 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import heroBallroom from "@/assets/hero-ballroom.jpg";
 import { fetchPublicHeroSlides } from "@/lib/hero-data";
 
 /** Time each slide stays on screen before crossfading to the next. */
 const SLIDE_INTERVAL_MS = 4500;
 
-const FALLBACK_ALT =
-  "Cream and gold draped ballroom with chandeliers and floral centrepieces styled by Peggies Events";
-
 /**
- * Full-background hero slideshow.
+ * Full-background hero slideshow, built entirely from images published in
+ * the Admin Dashboard's hero slideshow manager — there is no bundled stock
+ * photo. Until at least one image is published, the hero shows a plain
+ * brand-toned gradient (never a placeholder photo) so the section still
+ * looks intentional rather than broken.
  *
- * The fallback ballroom photo is always rendered as a base layer underneath
- * everything else, with its Ken Burns zoom running immediately on mount. Any
- * admin-uploaded slide sits on top of it. This matters because admin images
- * are fetched at runtime (fresh signed URLs, not bundled with the app), so
- * there's a brief network delay before they're actually downloaded — with
- * the fallback always present behind them, that gap simply shows the
- * fallback photo (already in motion) instead of a flash of the bare overlay
- * behind an image that hasn't painted yet.
- *
- * - No published hero images -> the fallback stays, indefinitely (site never breaks).
- * - Exactly one published image -> fades in over the fallback once loaded, static after that.
+ * - No published hero images -> a quiet espresso/champagne gradient.
+ * - Exactly one published image -> fades in over the gradient once loaded, static after that.
  * - Two or more -> once loaded, auto-advancing crossfade every ~4.5s.
  *
- * Slide images are also preloaded as soon as they're known, so later
- * crossfades in the rotation don't have their own loading gap either.
+ * Every published slide is preloaded as soon as its URL is known, so the
+ * first paint and every later crossfade in the rotation are ready to
+ * display instantly rather than waiting on a network round trip.
  *
- * Images come exclusively from the Admin Dashboard's hero slideshow manager
- * (Supabase `hero_slides` table + `hero-slides` storage bucket) and are never
- * mixed with the portfolio Gallery images.
+ * Images come exclusively from Supabase (`hero_slides` table + `hero-slides`
+ * storage bucket) and are never mixed with the portfolio Gallery images.
  */
 export function HeroSlideshow() {
   const { data: slides = [] } = useQuery({
@@ -67,14 +58,9 @@ export function HeroSlideshow() {
 
   return (
     <div className="absolute inset-0 h-full w-full overflow-hidden" aria-hidden="true">
-      {/* Always-present base layer — see the note above on why this never goes away. */}
-      <img
-        src={heroBallroom}
-        alt={slides.length === 0 ? FALLBACK_ALT : ""}
-        width={1920}
-        height={1280}
-        className="animate-ken-burns absolute inset-0 h-full w-full object-cover"
-      />
+      {/* Base layer for when there are no published slides yet (or before the
+          first one has loaded) — a plain brand-toned gradient, never a stock photo. */}
+      <div className="absolute inset-0 h-full w-full bg-gradient-to-br from-espresso via-espresso to-primary" />
 
       {slides.length === 1 && (
         <img
