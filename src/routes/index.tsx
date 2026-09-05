@@ -20,7 +20,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import { galleryAlt, portfolioAspect } from "@/lib/gallery";
 import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
-import { fetchPublicHeroSlides } from "@/lib/hero-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
 const PHONE_TEL = "+2349134153272";
@@ -78,10 +77,6 @@ const SERVICES = [
 ];
 
 export const Route = createFileRoute("/")({
-  // Fetch the hero slides on the server, so the very first HTML the browser
-  // paints already has the real image in it — no client-side fetch delay,
-  // and so no placeholder state to flash before it.
-  loader: async () => ({ heroSlides: await fetchPublicHeroSlides() }),
   head: () => ({
     meta: [
       { title: "Peggies Events | Luxury Event Planning & Decor in Abuja" },
@@ -193,11 +188,9 @@ function SiteNav() {
 }
 
 function Hero() {
-  const { heroSlides } = Route.useLoaderData();
-
   return (
     <section id="top" className="relative isolate">
-      <HeroSlideshow initialSlides={heroSlides} />
+      <HeroSlideshow />
       <div className="absolute inset-0 bg-espresso/70" />
       <div className="relative mx-auto flex min-h-[88vh] max-w-4xl flex-col items-center justify-center px-5 py-24 text-center">
         <p className="eyebrow text-champagne">
