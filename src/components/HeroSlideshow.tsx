@@ -18,12 +18,16 @@ const SLIDE_INTERVAL_MS = 4500;
  * bundle as everything else, so there is no runtime fetch and therefore no
  * possibility of a loading gap or flash before the carousel appears.
  *
+ * hero-3 leads the rotation because it's the smallest file — the first
+ * image the visitor sees should be the fastest one to finish downloading
+ * (see the matching <link rel="preload"> in the route's head() config).
+ *
  * To change these photos, replace the files in src/assets/hero/ (or add/
  * remove entries here) and redeploy — there's no Admin Dashboard control
  * for this carousel by design; that's the trade made for zero-latency,
  * always-reliable hero images.
  */
-const SLIDES = [hero1, hero2, hero3, hero4, hero5, hero6, hero7, hero8, hero9];
+export const HERO_SLIDES = [hero3, hero1, hero2, hero4, hero5, hero6, hero7, hero8, hero9];
 
 /**
  * Full-background hero slideshow. Every image is bundled at build time, so
@@ -36,14 +40,14 @@ export function HeroSlideshow() {
 
   useEffect(() => {
     const id = window.setInterval(() => {
-      setActive((i) => (i + 1) % SLIDES.length);
+      setActive((i) => (i + 1) % HERO_SLIDES.length);
     }, SLIDE_INTERVAL_MS);
     return () => window.clearInterval(id);
   }, []);
 
   return (
     <div className="absolute inset-0 h-full w-full overflow-hidden" aria-hidden="true">
-      {SLIDES.map((src, i) => (
+      {HERO_SLIDES.map((src, i) => (
         <img
           key={src}
           src={src}

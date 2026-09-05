@@ -13,7 +13,7 @@ import {
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
-import { HeroSlideshow } from "@/components/HeroSlideshow";
+import { HeroSlideshow, HERO_SLIDES } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
@@ -78,6 +78,11 @@ const SERVICES = [
 
 export const Route = createFileRoute("/")({
   head: () => ({
+    // Get the browser fetching the very first hero image as early as
+    // possible — in parallel with the page's CSS/JS, before hydration even
+    // starts — so there's the smallest possible window where the dark
+    // text-readability overlay is visible without the photo underneath it.
+    links: [{ rel: "preload", as: "image", href: HERO_SLIDES[0], fetchpriority: "high" }],
     meta: [
       { title: "Peggies Events | Luxury Event Planning & Decor in Abuja" },
       {
