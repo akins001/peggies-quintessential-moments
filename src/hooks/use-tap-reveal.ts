@@ -17,8 +17,11 @@ export function useTapReveal() {
 
   const handleTap = useCallback(
     (id: string, onActivate: () => void) => {
+      // If matchMedia is unavailable (very old browsers) fall back to
+      // activating on the first tap rather than swallowing it.
       const canHover =
-        typeof window !== "undefined" &&
+        typeof window === "undefined" ||
+        typeof window.matchMedia !== "function" ||
         window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
       if (!canHover && revealedId !== id) {
