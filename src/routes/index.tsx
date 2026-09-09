@@ -13,7 +13,8 @@ import {
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
-import { HeroSlideshow, HERO_SLIDES } from "@/components/HeroSlideshow";
+import { GalleryImage } from "@/components/GalleryImage";
+import { HeroSlideshow, HERO_FIRST_WEBP, HERO_SLIDES } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
@@ -82,7 +83,18 @@ export const Route = createFileRoute("/")({
     // possible — in parallel with the page's CSS/JS, before hydration even
     // starts — so there's the smallest possible window where the dark
     // text-readability overlay is visible without the photo underneath it.
-    links: [{ rel: "preload", as: "image", href: HERO_SLIDES[0], fetchpriority: "high" }],
+    // Modern browsers preload the WebP the <picture> will actually pick, so
+    // nothing is downloaded twice; older iOS Safari ignores this typed
+    // preload and simply fetches the JPEG when the hero renders.
+    links: [
+      {
+        rel: "preload",
+        as: "image",
+        href: HERO_FIRST_WEBP,
+        type: "image/webp",
+        fetchpriority: "high",
+      },
+    ],
     meta: [
       { title: "Peggies Events | Luxury Event Planning & Decor in Abuja" },
       {
