@@ -14,7 +14,7 @@ import {
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { GalleryImage } from "@/components/GalleryImage";
-import { HeroSlideshow, HERO_FIRST_WEBP, HERO_SLIDES } from "@/components/HeroSlideshow";
+import { HeroSlideshow, HERO_FIRST_WEBP } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
