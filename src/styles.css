@@ -295,7 +295,12 @@
     height: 0;
   }
 
-  [class*="aspect-"] > * {
+  [class*="aspect-"] > picture {
+    display: block;
+  }
+
+  [class*="aspect-"] > *,
+  [class*="aspect-"] > picture > img {
     position: absolute;
     top: 0;
     left: 0;
