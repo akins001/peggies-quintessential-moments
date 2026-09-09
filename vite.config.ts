@@ -7,6 +7,16 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  vite: {
+    build: {
+      // iPhone 6/7/8-era Safari (iOS 12) cannot parse optional chaining or
+      // nullish coalescing; a single unsupported token makes the whole bundle
+      // fail to evaluate, which shows up as a blank or half-rendered page.
+      // Transpile down so those devices can run the site.
+      target: ["es2017", "safari12"],
+      cssTarget: ["safari12"],
+    },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
