@@ -5,6 +5,13 @@ import portfolio4 from "@/assets/portfolio-4.jpg";
 import portfolio5 from "@/assets/portfolio-5.jpg";
 import portfolio6 from "@/assets/portfolio-6.jpg";
 import portfolio7 from "@/assets/portfolio-7.jpg";
+import portfolio1w from "@/assets/portfolio-1.webp";
+import portfolio2w from "@/assets/portfolio-2.webp";
+import portfolio3w from "@/assets/portfolio-3.webp";
+import portfolio4w from "@/assets/portfolio-4.webp";
+import portfolio5w from "@/assets/portfolio-5.webp";
+import portfolio6w from "@/assets/portfolio-6.webp";
+import portfolio7w from "@/assets/portfolio-7.webp";
 
 /**
  * Single source of truth for the portfolio gallery.
@@ -32,6 +39,8 @@ export type GalleryItem = {
   location: string;
   /** Null until photography for this celebration is published. */
   image: string | null;
+  /** Optional smaller WebP of `image` (bundled photos only). */
+  imageWebp?: string | null;
   featured: boolean;
   sortOrder: number;
 };
@@ -47,13 +56,13 @@ export const GALLERY_CATEGORIES: GalleryCategory[] = [
 ];
 
 export const GALLERY_ITEMS: GalleryItem[] = [
-  { id: "ivory-vows", title: "Ivory Vows", category: "Weddings", location: "Abuja", image: portfolio1, featured: true, sortOrder: 1 },
-  { id: "espresso-gala", title: "The Espresso Gala", category: "Dinners", location: "Abuja", image: portfolio2, featured: true, sortOrder: 2 },
-  { id: "champagne-shower", title: "Champagne Shower", category: "Showers", location: "Abuja", image: portfolio3, featured: true, sortOrder: 3 },
-  { id: "golden-thrones", title: "Golden Thrones", category: "Traditional", location: "Abuja", image: portfolio4, featured: true, sortOrder: 4 },
-  { id: "award-night", title: "Award Night", category: "Corporate", location: "Abuja", image: portfolio5, featured: true, sortOrder: 5 },
-  { id: "candlelit-yes", title: "A Candlelit Yes", category: "Proposals", location: "Abuja", image: portfolio6, featured: true, sortOrder: 6 },
-  { id: "gilded-forty", title: "The Gilded Forty", category: "Birthdays", location: "Abuja", image: portfolio7, featured: true, sortOrder: 7 },
+  { id: "ivory-vows", title: "Ivory Vows", category: "Weddings", location: "Abuja", image: portfolio1, imageWebp: portfolio1w, featured: true, sortOrder: 1 },
+  { id: "espresso-gala", title: "The Espresso Gala", category: "Dinners", location: "Abuja", image: portfolio2, imageWebp: portfolio2w, featured: true, sortOrder: 2 },
+  { id: "champagne-shower", title: "Champagne Shower", category: "Showers", location: "Abuja", image: portfolio3, imageWebp: portfolio3w, featured: true, sortOrder: 3 },
+  { id: "golden-thrones", title: "Golden Thrones", category: "Traditional", location: "Abuja", image: portfolio4, imageWebp: portfolio4w, featured: true, sortOrder: 4 },
+  { id: "award-night", title: "Award Night", category: "Corporate", location: "Abuja", image: portfolio5, imageWebp: portfolio5w, featured: true, sortOrder: 5 },
+  { id: "candlelit-yes", title: "A Candlelit Yes", category: "Proposals", location: "Abuja", image: portfolio6, imageWebp: portfolio6w, featured: true, sortOrder: 6 },
+  { id: "gilded-forty", title: "The Gilded Forty", category: "Birthdays", location: "Abuja", image: portfolio7, imageWebp: portfolio7w, featured: true, sortOrder: 7 },
 
   // Awaiting photography — these appear in the full gallery only.
   { id: "rose-quartz-wedding", title: "Rose Quartz Wedding", category: "Weddings", location: "Abuja", image: null, featured: false, sortOrder: 8 },
