@@ -15,13 +15,22 @@ export function useInView<T extends HTMLElement>() {
     const node = ref.current;
     if (!node) return;
 
+    // Older iOS Safari (and any browser without IntersectionObserver) would
+    // otherwise leave every wrapped section stuck at opacity-0 — i.e. blank
+    // page. Reveal immediately instead of enhancing.
+    if (typeof window === "undefined" || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+
     if (
-      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     ) {
       setInView(true);
       return;
     }
+
 
     const observer = new IntersectionObserver(
       ([entry]) => {
