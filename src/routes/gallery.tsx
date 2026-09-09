@@ -126,12 +126,11 @@ function GalleryPage() {
                   )}`}
                 >
                   {item.image ? (
-                    <img
+                    <GalleryImage
                       src={item.image}
+                      webp={item.imageWebp}
                       alt={galleryAlt(item)}
-                      width={1024}
-                      height={1280}
-                      loading="lazy"
+                      eager={i < 4}
                       className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
                         revealedId === item.id ? "scale-[1.04]" : ""
                       }`}
