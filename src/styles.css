@@ -216,3 +216,110 @@
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Legacy iOS Safari compatibility (iPhone 6/7/8 era, iOS 12–15.3)
+   ---------------------------------------------------------------------------
+   1) oklch() colours only landed in Safari 15.4. Before that every
+      var(--token) used as a colour computes to "invalid at computed value
+      time" — text, backgrounds and the hero overlay all collapse and the page
+      looks broken/blank. Re-declare the same palette in sRGB hex, gated on
+      @supports, so only pre-15.4 engines pick it up.
+   2) aspect-ratio shipped in Safari 15. Without it the portfolio tiles and
+      founder portrait get zero height, leaving blank gaps where photos should
+      be. Fall back to the padding-ratio technique for exactly the ratios used.
+   These blocks are inert on modern browsers. */
+
+@supports not (color: oklch(0 0 0)) {
+  :root {
+    --cream: #fdf9f0;
+    --champagne: #ecdcbe;
+    --gold: #c9a463;
+    --espresso: #3b2b1e;
+    --blush: #e3c3bb;
+    --background: #fdfaf3;
+    --foreground: #33261a;
+    --card: #fffefb;
+    --card-foreground: #33261a;
+    --popover: #fffefb;
+    --popover-foreground: #33261a;
+    --primary: #3b2b1e;
+    --primary-foreground: #fdf9f0;
+    --secondary: #f4ecdd;
+    --secondary-foreground: #3b2b1e;
+    --muted: #f5eee1;
+    --muted-foreground: #77685a;
+    --accent: #c9a463;
+    --accent-foreground: #2d2115;
+    --destructive: #c0392b;
+    --destructive-foreground: #fbfbfb;
+    --border: #e5dac6;
+    --input: #e5dac6;
+    --ring: #c9a463;
+    --sidebar: #fbfbfb;
+    --sidebar-foreground: #1c2129;
+    --sidebar-primary: #2a3140;
+    --sidebar-primary-foreground: #fbfbfb;
+    --sidebar-accent: #f2f4f7;
+    --sidebar-accent-foreground: #2a3140;
+    --sidebar-border: #e6e9ef;
+    --sidebar-ring: #a3aab8;
+  }
+
+  .dark {
+    --background: #101623;
+    --foreground: #fbfbfc;
+    --card: #1d2431;
+    --card-foreground: #fbfbfc;
+    --popover: #1d2431;
+    --popover-foreground: #fbfbfc;
+    --primary: #e6e9ef;
+    --primary-foreground: #1d2431;
+    --secondary: #2b3240;
+    --secondary-foreground: #fbfbfc;
+    --muted: #2b3240;
+    --muted-foreground: #a3aab8;
+    --accent: #2b3240;
+    --accent-foreground: #fbfbfc;
+    --destructive: #e06054;
+    --destructive-foreground: #fbfbfc;
+    --border: rgba(255, 255, 255, 0.1);
+    --input: rgba(255, 255, 255, 0.15);
+    --ring: #7d828c;
+  }
+}
+
+@supports not (aspect-ratio: 1 / 1) {
+  [class*="aspect-"] {
+    position: relative;
+    height: 0;
+  }
+
+  [class*="aspect-"] > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  [class*="aspect-square"] {
+    padding-bottom: 100%;
+  }
+
+  [class*="aspect-[4/5]"] {
+    padding-bottom: 125%;
+  }
+
+  [class*="aspect-[3/4]"] {
+    padding-bottom: 133.333%;
+  }
+
+  [class*="aspect-[6/7]"] {
+    padding-bottom: 116.666%;
+  }
+
+  [class*="aspect-[5/6]"] {
+    padding-bottom: 120%;
+  }
+}
