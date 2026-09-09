@@ -2,7 +2,7 @@ type Props = {
   /** JPEG (or signed URL) source — always present. */
   src: string;
   /** Optional smaller WebP of the same photo, used where supported. */
-  webp?: string | null;
+  webp?: string | null | undefined;
   alt: string;
   className?: string;
   /** First row of tiles can load eagerly; everything else waits. */
