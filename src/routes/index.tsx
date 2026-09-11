@@ -19,7 +19,7 @@ import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { galleryAlt, portfolioAspect } from "@/lib/gallery";
+import { galleryAlt, portfolioTile } from "@/lib/gallery";
 import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
