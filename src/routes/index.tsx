@@ -12,14 +12,12 @@ import {
 } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
-import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { GalleryImage } from "@/components/GalleryImage";
 import { HeroSlideshow, HERO_FIRST_WEBP } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
-import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { galleryAlt, portfolioTile } from "@/lib/gallery";
+import { galleryAlt, PORTFOLIO_CARD_ASPECT } from "@/lib/gallery";
 import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
@@ -339,7 +337,7 @@ function Celebrations() {
     : all
   ).slice(0, 7);
   const [active, setActive] = useState<number | null>(null);
-  const { revealedId, handleTap } = useTapReveal();
+  
   const totalCount = all.length;
 
   return (
@@ -361,42 +359,43 @@ function Celebrations() {
           </p>
         </div>
 
-        {/* Editorial preview composition: only featured items render here. */}
-        <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-6 lg:gap-6">
+        {/* Uniform 3:2 card grid, matching the /gallery page. */}
+        <div className="mt-14 grid grid-cols-1 gap-[15px] sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((item, i) => (
-            <figure key={item.id} className={portfolioTile(i)}>
-              <Reveal delay={Math.min(i * 70, 350)} className="h-full">
+            <figure key={item.id} className="m-0">
+              <Reveal delay={Math.min(i * 70, 350)}>
                 <button
                   type="button"
-                  onClick={() => handleTap(item.id, () => setActive(i))}
+                  onClick={() => setActive(i)}
                   aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
-                  className="group relative block h-full w-full overflow-hidden border border-champagne/25 bg-cream/5 shadow-[0_18px_45px_-22px_rgba(0,0,0,0.6)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-champagne/50 hover:shadow-[0_28px_60px_-20px_rgba(0,0,0,0.7)] text-left"
+                  className="group block w-full text-left"
                 >
+                  <span
+                    className={`relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 ${PORTFOLIO_CARD_ASPECT}`}
+                  >
+                    {item.image ? (
+                      <GalleryImage
+                        src={item.image}
+                        webp={item.imageWebp}
+                        alt={galleryAlt(item)}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      />
+                    ) : (
+                      <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
+                        <span className="font-display text-4xl text-champagne/50">P</span>
+                        <span className="eyebrow text-champagne/70">Coming soon</span>
+                      </span>
+                    )}
 
-                  {item.image ? (
-                    <GalleryImage
-                      src={item.image}
-                      webp={item.imageWebp}
-                      alt={galleryAlt(item)}
-                      className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
-                        revealedId === item.id ? "scale-[1.04]" : ""
-                      }`}
-                    />
-                  ) : (
-                    <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-6 text-center">
-                      <span className="font-display text-4xl text-champagne/50">P</span>
-                      <span className="eyebrow text-champagne/70">Coming soon</span>
-                    </span>
-                  )}
+                    <span className="pointer-events-none absolute inset-0 bg-espresso/0 transition-colors duration-500 ease-out group-hover:bg-espresso/25 group-focus-visible:bg-espresso/25" />
+                  </span>
 
-                  {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
-                      or on a first tap that reveals it before a second tap opens the
-                      lightbox (touch devices — see useTapReveal). */}
-                  <GalleryCaptionOverlay
-                    title={item.title}
-                    category={item.category}
-                    revealed={revealedId === item.id}
-                  />
+                  <figcaption className="mt-3 block text-center">
+                    {item.title ? (
+                      <span className="block font-display text-lg text-cream">{item.title}</span>
+                    ) : null}
+                    <span className="eyebrow mt-1 block text-champagne/70">{item.category}</span>
+                  </figcaption>
                 </button>
               </Reveal>
             </figure>

@@ -103,56 +103,12 @@ export function galleryAlt(item: GalleryItem): string {
 }
 
 /**
- * A small rotating set of aspect ratios for the portfolio-style masonry grids
- * (Featured Celebrations on the homepage, the full /gallery). Cycling through
- * a handful of ratios — rather than one uniform size or a simple two-way
- * alternation — gives the grid an organic, editorial rhythm instead of rows
- * of identically-sized boxes lined up in lockstep, while staying tidy since
- * every tile still fits one of a small, deliberate set of shapes.
+ * Uniform portfolio card shape shared by the /gallery grid and the homepage
+ * Featured Celebrations preview: every card is the same 3:2 landscape frame,
+ * laid out in a plain 1/2/3-column grid with small even gaps. A single fixed
+ * ratio (rather than a masonry of mixed shapes) reads as calm and gallery-like,
+ * and it keeps working on older iOS Safari thanks to the padding-based
+ * aspect-ratio fallback in styles.css.
  */
-const PORTFOLIO_ASPECTS = [
-  "aspect-[4/5]",
-  "aspect-square",
-  "aspect-[3/4]",
-  "aspect-[6/7]",
-  "aspect-square",
-  "aspect-[4/5]",
-  "aspect-[5/6]",
-] as const;
-
-export function portfolioAspect(i: number): string {
-  return PORTFOLIO_ASPECTS[i % PORTFOLIO_ASPECTS.length] ?? PORTFOLIO_ASPECTS[0];
-}
-
-/**
- * Editorial composition for the portfolio grids: instead of rows of equal
- * boxes, tiles run in a repeating five-image rhythm where one image is a wide
- * focal piece and its neighbours are narrower portrait/square shapes. The
- * rhythm mirrors every other cycle (focal first, then focal last) so the page
- * reads like a printed spread rather than a template.
- *
- * Widths are expressed as spans of a six-column grid on large screens and a
- * simple two-column grid on phones, and the aspect ratios of tiles sharing a
- * row are chosen so their heights match exactly — no ragged gaps. Plain grid
- * spans plus aspect ratios keep this working on older iOS Safari (which has
- * the padding-based aspect fallbacks in styles.css).
- */
-const FOCAL = "col-span-2 aspect-[16/11] lg:col-span-4";
-const TALL = "col-span-1 aspect-[4/5] lg:col-span-2 lg:aspect-[8/11]";
-const UPRIGHT = "col-span-1 aspect-[4/5] lg:col-span-2";
-
-export function portfolioTile(i: number): string {
-  const pos = i % 5;
-  const mirrored = Math.floor(i / 5) % 2 === 1;
-
-  if (!mirrored) {
-    if (pos === 0) return FOCAL;
-    if (pos === 1) return TALL;
-    return UPRIGHT;
-  }
-
-  if (pos === 4) return FOCAL;
-  if (pos === 3) return TALL;
-  return UPRIGHT;
-}
+export const PORTFOLIO_CARD_ASPECT = "aspect-[3/2]";
 

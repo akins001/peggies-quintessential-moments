@@ -3,13 +3,16 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
-import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { GalleryImage } from "@/components/GalleryImage";
 import { Reveal } from "@/components/Reveal";
-import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { GALLERY_CATEGORIES, galleryAlt, portfolioTile, type GalleryCategory } from "@/lib/gallery";
+import {
+  GALLERY_CATEGORIES,
+  galleryAlt,
+  PORTFOLIO_CARD_ASPECT,
+  type GalleryCategory,
+} from "@/lib/gallery";
 import { fetchPublicGallery } from "@/lib/gallery-data";
 
 const WHATSAPP =
@@ -44,7 +47,6 @@ function GalleryPage() {
   });
   const [filter, setFilter] = useState<GalleryCategory | "All">("All");
   const [active, setActive] = useState<number | null>(null);
-  const { revealedId, handleTap } = useTapReveal();
 
   const items = useMemo(
     () => (filter === "All" ? all : all.filter((i) => i.category === filter)),
@@ -115,41 +117,44 @@ function GalleryPage() {
           {items.length} {items.length === 1 ? "celebration" : "celebrations"}
         </p>
 
-        <ul className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:mt-14 lg:grid-cols-6 lg:gap-6">
+        <ul className="mt-10 grid grid-cols-1 gap-[15px] sm:grid-cols-2 lg:mt-14 lg:grid-cols-3">
           {items.map((item, i) => (
-            <li key={item.id} className={portfolioTile(i)}>
-              <Reveal delay={Math.min(i * 50, 400)} className="h-full">
+            <li key={item.id}>
+              <Reveal delay={Math.min(i * 50, 400)}>
                 <button
                   type="button"
-                  onClick={() => handleTap(item.id, () => setActive(i))}
-                  className="group relative block h-full w-full overflow-hidden border border-border bg-secondary/60 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.5)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_26px_55px_-20px_rgba(0,0,0,0.6)] text-left"
+                  onClick={() => setActive(i)}
+                  className="group block w-full text-left"
                 >
+                  <span
+                    className={`relative block w-full overflow-hidden border border-border bg-secondary/60 ${PORTFOLIO_CARD_ASPECT}`}
+                  >
+                    {item.image ? (
+                      <GalleryImage
+                        src={item.image}
+                        webp={item.imageWebp}
+                        alt={galleryAlt(item)}
+                        eager={i < 3}
+                        className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      />
+                    ) : (
+                      <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-4 text-center">
+                        <span className="font-display text-4xl text-accent/50">P</span>
+                        <span className="eyebrow text-muted-foreground">Coming soon</span>
+                      </span>
+                    )}
 
-                  {item.image ? (
-                    <GalleryImage
-                      src={item.image}
-                      webp={item.imageWebp}
-                      alt={galleryAlt(item)}
-                      eager={i < 4}
-                      className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] ${
-                        revealedId === item.id ? "scale-[1.04]" : ""
-                      }`}
-                    />
-                  ) : (
-                    <span className="flex h-full w-full flex-col items-center justify-center gap-2 px-4 text-center">
-                      <span className="font-display text-4xl text-accent/50">P</span>
-                      <span className="eyebrow text-muted-foreground">Coming soon</span>
-                    </span>
-                  )}
+                    {/* Subtle darken on hover/focus — the caption itself now sits
+                        below the image, so it stays readable on touch devices too. */}
+                    <span className="pointer-events-none absolute inset-0 bg-espresso/0 transition-colors duration-500 ease-out group-hover:bg-espresso/25 group-focus-visible:bg-espresso/25" />
+                  </span>
 
-                  {/* Caption overlay: hidden by default, fades in on hover/focus (desktop),
-                      or on a first tap that reveals it before a second tap opens the
-                      lightbox (touch devices — see useTapReveal). */}
-                  <GalleryCaptionOverlay
-                    title={item.title}
-                    category={item.category}
-                    revealed={revealedId === item.id}
-                  />
+                  <span className="mt-3 block text-center">
+                    {item.title ? (
+                      <span className="block font-display text-lg text-primary">{item.title}</span>
+                    ) : null}
+                    <span className="eyebrow mt-1 block text-muted-foreground">{item.category}</span>
+                  </span>
                 </button>
               </Reveal>
             </li>
