@@ -9,7 +9,7 @@ import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { GALLERY_CATEGORIES, galleryAlt, portfolioAspect, type GalleryCategory } from "@/lib/gallery";
+import { GALLERY_CATEGORIES, galleryAlt, portfolioTile, type GalleryCategory } from "@/lib/gallery";
 import { fetchPublicGallery } from "@/lib/gallery-data";
 
 const WHATSAPP =
@@ -115,17 +115,16 @@ function GalleryPage() {
           {items.length} {items.length === 1 ? "celebration" : "celebrations"}
         </p>
 
-        <ul className="mt-8 columns-2 gap-4 sm:columns-3 sm:gap-5 lg:columns-4 [&>*]:mb-4 sm:[&>*]:mb-5">
+        <ul className="mt-10 grid grid-cols-2 gap-3 sm:gap-5 lg:mt-14 lg:grid-cols-6 lg:gap-6">
           {items.map((item, i) => (
-            <li key={item.id} className="break-inside-avoid">
-              <Reveal delay={Math.min(i * 50, 400)}>
+            <li key={item.id} className={portfolioTile(i)}>
+              <Reveal delay={Math.min(i * 50, 400)} className="h-full">
                 <button
                   type="button"
                   onClick={() => handleTap(item.id, () => setActive(i))}
-                  className={`group relative block w-full overflow-hidden border border-border bg-secondary/60 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.5)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_26px_55px_-20px_rgba(0,0,0,0.6)] text-left ${portfolioAspect(
-                    i
-                  )}`}
+                  className="group relative block h-full w-full overflow-hidden border border-border bg-secondary/60 shadow-[0_18px_45px_-24px_rgba(0,0,0,0.5)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-accent/50 hover:shadow-[0_26px_55px_-20px_rgba(0,0,0,0.6)] text-left"
                 >
+
                   {item.image ? (
                     <GalleryImage
                       src={item.image}

@@ -19,7 +19,7 @@ import { Reveal } from "@/components/Reveal";
 import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { galleryAlt, portfolioAspect } from "@/lib/gallery";
+import { galleryAlt, portfolioTile } from "@/lib/gallery";
 import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
@@ -361,19 +361,18 @@ function Celebrations() {
           </p>
         </div>
 
-        {/* Compact masonry preview: only featured items render here. */}
-        <div className="mt-14 columns-2 gap-4 sm:gap-5 lg:columns-3 [&>*]:mb-4 sm:[&>*]:mb-5">
+        {/* Editorial preview composition: only featured items render here. */}
+        <div className="mt-14 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-6 lg:gap-6">
           {featured.map((item, i) => (
-            <figure key={item.id} className="break-inside-avoid">
-              <Reveal delay={Math.min(i * 70, 350)}>
+            <figure key={item.id} className={portfolioTile(i)}>
+              <Reveal delay={Math.min(i * 70, 350)} className="h-full">
                 <button
                   type="button"
                   onClick={() => handleTap(item.id, () => setActive(i))}
                   aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
-                  className={`group relative block w-full overflow-hidden border border-champagne/25 bg-cream/5 shadow-[0_18px_45px_-22px_rgba(0,0,0,0.6)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-champagne/50 hover:shadow-[0_28px_60px_-20px_rgba(0,0,0,0.7)] text-left ${portfolioAspect(
-                    i
-                  )}`}
+                  className="group relative block h-full w-full overflow-hidden border border-champagne/25 bg-cream/5 shadow-[0_18px_45px_-22px_rgba(0,0,0,0.6)] transition-[transform,box-shadow,border-color] duration-500 ease-out hover:-translate-y-1 hover:border-champagne/50 hover:shadow-[0_28px_60px_-20px_rgba(0,0,0,0.7)] text-left"
                 >
+
                   {item.image ? (
                     <GalleryImage
                       src={item.image}
