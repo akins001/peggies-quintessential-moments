@@ -3,13 +3,16 @@ import { useMemo, useState } from "react";
 import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
-import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { GalleryImage } from "@/components/GalleryImage";
 import { Reveal } from "@/components/Reveal";
-import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { GALLERY_CATEGORIES, galleryAlt, portfolioTile, type GalleryCategory } from "@/lib/gallery";
+import {
+  GALLERY_CATEGORIES,
+  galleryAlt,
+  PORTFOLIO_CARD_ASPECT,
+  type GalleryCategory,
+} from "@/lib/gallery";
 import { fetchPublicGallery } from "@/lib/gallery-data";
 
 const WHATSAPP =
@@ -44,7 +47,6 @@ function GalleryPage() {
   });
   const [filter, setFilter] = useState<GalleryCategory | "All">("All");
   const [active, setActive] = useState<number | null>(null);
-  const { revealedId, handleTap } = useTapReveal();
 
   const items = useMemo(
     () => (filter === "All" ? all : all.filter((i) => i.category === filter)),
