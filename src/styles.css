@@ -327,4 +327,8 @@
   [class*="aspect-[5/6]"] {
     padding-bottom: 120%;
   }
+
+  [class*="aspect-[3/2]"] {
+    padding-bottom: 66.666%;
+  }
 }
