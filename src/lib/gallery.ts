@@ -123,3 +123,36 @@ const PORTFOLIO_ASPECTS = [
 export function portfolioAspect(i: number): string {
   return PORTFOLIO_ASPECTS[i % PORTFOLIO_ASPECTS.length] ?? PORTFOLIO_ASPECTS[0];
 }
+
+/**
+ * Editorial composition for the portfolio grids: instead of rows of equal
+ * boxes, tiles run in a repeating five-image rhythm where one image is a wide
+ * focal piece and its neighbours are narrower portrait/square shapes. The
+ * rhythm mirrors every other cycle (focal first, then focal last) so the page
+ * reads like a printed spread rather than a template.
+ *
+ * Widths are expressed as spans of a six-column grid on large screens and a
+ * simple two-column grid on phones, and the aspect ratios of tiles sharing a
+ * row are chosen so their heights match exactly — no ragged gaps. Plain grid
+ * spans plus aspect ratios keep this working on older iOS Safari (which has
+ * the padding-based aspect fallbacks in styles.css).
+ */
+const FOCAL = "col-span-2 aspect-[16/11] lg:col-span-4";
+const TALL = "col-span-1 aspect-[4/5] lg:col-span-2 lg:aspect-[8/11]";
+const UPRIGHT = "col-span-1 aspect-[4/5] lg:col-span-2";
+
+export function portfolioTile(i: number): string {
+  const pos = i % 5;
+  const mirrored = Math.floor(i / 5) % 2 === 1;
+
+  if (!mirrored) {
+    if (pos === 0) return FOCAL;
+    if (pos === 1) return TALL;
+    return UPRIGHT;
+  }
+
+  if (pos === 4) return FOCAL;
+  if (pos === 3) return TALL;
+  return UPRIGHT;
+}
+
