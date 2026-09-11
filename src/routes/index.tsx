@@ -12,14 +12,12 @@ import {
 } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
-import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { GalleryImage } from "@/components/GalleryImage";
 import { HeroSlideshow, HERO_FIRST_WEBP } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
-import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
-import { galleryAlt, portfolioTile } from "@/lib/gallery";
+import { galleryAlt, PORTFOLIO_CARD_ASPECT } from "@/lib/gallery";
 import { fetchHeadshot, fetchPublicGallery } from "@/lib/gallery-data";
 
 const PHONE_DISPLAY = "0913 415 3272";
