@@ -13,8 +13,10 @@ import {
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryImage } from "@/components/GalleryImage";
+import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { HeroSlideshow, HERO_FIRST_WEBP } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
+import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
 import { galleryAlt, PORTFOLIO_CARD_ASPECT } from "@/lib/gallery";
@@ -337,7 +339,8 @@ function Celebrations() {
     : all
   ).slice(0, 7);
   const [active, setActive] = useState<number | null>(null);
-  
+  const { revealedId, handleTap } = useTapReveal();
+
   const totalCount = all.length;
 
   return (
@@ -366,7 +369,7 @@ function Celebrations() {
               <Reveal delay={Math.min(i * 70, 350)}>
                 <button
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => handleTap(item.id, () => setActive(i))}
                   aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
                   className="group block w-full text-left"
                 >
@@ -387,19 +390,17 @@ function Celebrations() {
                       </span>
                     )}
 
-                    <span className="pointer-events-none absolute inset-0 bg-espresso/0 transition-colors duration-500 ease-out group-hover:bg-espresso/25 group-focus-visible:bg-espresso/25" />
+                    <GalleryCaptionOverlay
+                      title={item.title}
+                      category={item.category}
+                      revealed={revealedId === item.id}
+                    />
                   </span>
-
-                  <figcaption className="mt-3 block text-center">
-                    {item.title ? (
-                      <span className="block font-display text-lg text-cream">{item.title}</span>
-                    ) : null}
-                    <span className="eyebrow mt-1 block text-champagne/70">{item.category}</span>
-                  </figcaption>
                 </button>
               </Reveal>
             </figure>
           ))}
+
         </div>
 
         <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">

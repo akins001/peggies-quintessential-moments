@@ -4,7 +4,9 @@ import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryImage } from "@/components/GalleryImage";
+import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { Reveal } from "@/components/Reveal";
+import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
 import {
@@ -47,6 +49,7 @@ function GalleryPage() {
   });
   const [filter, setFilter] = useState<GalleryCategory | "All">("All");
   const [active, setActive] = useState<number | null>(null);
+  const { revealedId, handleTap } = useTapReveal();
 
   const items = useMemo(
     () => (filter === "All" ? all : all.filter((i) => i.category === filter)),
@@ -123,7 +126,7 @@ function GalleryPage() {
               <Reveal delay={Math.min(i * 50, 400)}>
                 <button
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => handleTap(item.id, () => setActive(i))}
                   className="group block w-full text-left"
                 >
                   <span
@@ -144,21 +147,17 @@ function GalleryPage() {
                       </span>
                     )}
 
-                    {/* Subtle darken on hover/focus — the caption itself now sits
-                        below the image, so it stays readable on touch devices too. */}
-                    <span className="pointer-events-none absolute inset-0 bg-espresso/0 transition-colors duration-500 ease-out group-hover:bg-espresso/25 group-focus-visible:bg-espresso/25" />
-                  </span>
-
-                  <span className="mt-3 block text-center">
-                    {item.title ? (
-                      <span className="block font-display text-lg text-primary">{item.title}</span>
-                    ) : null}
-                    <span className="eyebrow mt-1 block text-muted-foreground">{item.category}</span>
+                    <GalleryCaptionOverlay
+                      title={item.title}
+                      category={item.category}
+                      revealed={revealedId === item.id}
+                    />
                   </span>
                 </button>
               </Reveal>
             </li>
           ))}
+
         </ul>
 
         <Reveal className="mt-16 border-t border-border pt-12">
