@@ -4,7 +4,9 @@ import { ArrowLeft, MessageCircle } from "lucide-react";
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryImage } from "@/components/GalleryImage";
+import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { Reveal } from "@/components/Reveal";
+import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
 import {
