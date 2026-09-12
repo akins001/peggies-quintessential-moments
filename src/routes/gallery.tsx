@@ -49,6 +49,7 @@ function GalleryPage() {
   });
   const [filter, setFilter] = useState<GalleryCategory | "All">("All");
   const [active, setActive] = useState<number | null>(null);
+  const { revealedId, handleTap } = useTapReveal();
 
   const items = useMemo(
     () => (filter === "All" ? all : all.filter((i) => i.category === filter)),
