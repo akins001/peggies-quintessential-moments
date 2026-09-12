@@ -13,8 +13,10 @@ import {
 
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { GalleryImage } from "@/components/GalleryImage";
+import { GalleryCaptionOverlay } from "@/components/GalleryCaptionOverlay";
 import { HeroSlideshow, HERO_FIRST_WEBP } from "@/components/HeroSlideshow";
 import { Reveal } from "@/components/Reveal";
+import { useTapReveal } from "@/hooks/use-tap-reveal";
 import { useQuery } from "@tanstack/react-query";
 
 import { galleryAlt, PORTFOLIO_CARD_ASPECT } from "@/lib/gallery";
