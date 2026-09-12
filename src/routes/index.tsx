@@ -366,7 +366,7 @@ function Celebrations() {
               <Reveal delay={Math.min(i * 70, 350)}>
                 <button
                   type="button"
-                  onClick={() => setActive(i)}
+                  onClick={() => handleTap(item.id, () => setActive(i))}
                   aria-label={item.title ? `View ${item.title}` : "View portfolio image"}
                   className="group block w-full text-left"
                 >
@@ -387,19 +387,17 @@ function Celebrations() {
                       </span>
                     )}
 
-                    <span className="pointer-events-none absolute inset-0 bg-espresso/0 transition-colors duration-500 ease-out group-hover:bg-espresso/25 group-focus-visible:bg-espresso/25" />
+                    <GalleryCaptionOverlay
+                      title={item.title}
+                      category={item.category}
+                      revealed={revealedId === item.id}
+                    />
                   </span>
-
-                  <figcaption className="mt-3 block text-center">
-                    {item.title ? (
-                      <span className="block font-display text-lg text-cream">{item.title}</span>
-                    ) : null}
-                    <span className="eyebrow mt-1 block text-champagne/70">{item.category}</span>
-                  </figcaption>
                 </button>
               </Reveal>
             </figure>
           ))}
+
         </div>
 
         <div className="mt-10 flex flex-col items-start gap-4 sm:flex-row sm:items-center">
