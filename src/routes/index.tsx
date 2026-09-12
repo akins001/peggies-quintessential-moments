@@ -337,7 +337,8 @@ function Celebrations() {
     : all
   ).slice(0, 7);
   const [active, setActive] = useState<number | null>(null);
-  
+  const { revealedId, handleTap } = useTapReveal();
+
   const totalCount = all.length;
 
   return (
