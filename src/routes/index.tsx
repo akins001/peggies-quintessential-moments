@@ -610,10 +610,18 @@ function SiteFooter() {
                   WhatsApp
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Instagram className="h-4 w-4" aria-hidden="true" />
-                @peggies_events
+              <li>
+                <a
+                  href="https://www.instagram.com/peggies_events"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-champagne"
+                >
+                  <Instagram className="h-4 w-4" aria-hidden="true" />
+                  @peggies_events
+                </a>
               </li>
+
               <li className="pt-2 leading-relaxed">
                 F01 Charlottes Adesiyan Street,
                 <br />
