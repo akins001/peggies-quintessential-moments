@@ -23,22 +23,32 @@ const WHATSAPP =
 export const Route = createFileRoute("/gallery")({
   head: () => ({
     meta: [
-      { title: "Gallery | Peggies Events — Luxury Event Decor in Abuja" },
+      { title: "Gallery | Luxury Event Decor & Weddings in Abuja | Peggies Events" },
       {
         name: "description",
         content:
-          "Browse the full Peggies Events portfolio: weddings, traditional ceremonies, corporate functions, showers, proposals and gala dinners styled in Abuja.",
+          "Browse the full Peggies Events portfolio: luxury weddings, traditional ceremonies, corporate galas, showers, proposals and gala dinners styled in Abuja, Nigeria.",
       },
-      { property: "og:title", content: "Gallery | Peggies Events" },
+      { property: "og:title", content: "Gallery | Peggies Events — Luxury Event Decor in Abuja" },
       {
         property: "og:description",
         content:
-          "The complete Peggies Events portfolio of weddings, traditional ceremonies, corporate events and luxury celebrations in Abuja.",
+          "The complete Peggies Events portfolio of weddings, traditional ceremonies, corporate events and luxury celebrations in Abuja, Nigeria.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Peggies Events" },
+      { property: "og:url", content: "https://peggies-quintessential-moments.lovable.app/gallery" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Gallery | Peggies Events" },
+      {
+        name: "twitter:description",
+        content:
+          "Luxury weddings, traditional ceremonies and corporate celebrations styled by Peggies Events in Abuja, Nigeria.",
+      },
     ],
+    links: [{ rel: "canonical", href: "https://peggies-quintessential-moments.lovable.app/gallery" }],
   }),
+
   component: GalleryPage,
 });
 
