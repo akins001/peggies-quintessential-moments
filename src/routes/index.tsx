@@ -94,24 +94,84 @@ export const Route = createFileRoute("/")({
         type: "image/webp",
         fetchpriority: "high",
       },
+      { rel: "canonical", href: "https://peggies-quintessential-moments.lovable.app/" },
     ],
     meta: [
       { title: "Peggies Events | Luxury Event Planning & Decor in Abuja" },
       {
         name: "description",
         content:
-          "Peggies Exclusive Events crafts quintessential, magical moments — full-service planning, production and high-end decoration for weddings, galas and corporate events in Abuja.",
+          "Luxury event planning, production and high-end decor in Abuja, Nigeria — weddings, corporate galas and milestone celebrations by Peggies Events. Book a consultation.",
       },
       { property: "og:title", content: "Peggies Events | Luxury Event Planning & Decor in Abuja" },
       {
         property: "og:description",
         content:
-          "Crafting Quintessential, Magical Moments. Comprehensive planning, production and luxury decoration for weddings, corporate functions and gala dinners in Abuja.",
+          "Crafting Quintessential, Magical Moments. Luxury weddings, corporate galas and milestone celebrations planned, produced and decorated in Abuja, Nigeria.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Peggies Events" },
+      { property: "og:url", content: "https://peggies-quintessential-moments.lovable.app/" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Peggies Events | Luxury Event Planning & Decor in Abuja" },
+      {
+        name: "twitter:description",
+        content:
+          "Luxury weddings, corporate galas and milestone celebrations planned, produced and decorated in Abuja, Nigeria.",
+      },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": ["LocalBusiness", "ProfessionalService"],
+          "@id": "https://peggies-quintessential-moments.lovable.app/#business",
+          name: "Peggies Events",
+          alternateName: "Peggies Exclusive Events",
+          slogan: "Crafting Quintessential, Magical Moments.",
+          description:
+            "Peggies Events is a full-service luxury event planning, production and decoration firm in Abuja, Nigeria, specialising in weddings, traditional ceremonies, corporate functions, gala dinners and milestone celebrations.",
+          url: "https://peggies-quintessential-moments.lovable.app/",
+          telephone: "+2349134153272",
+          areaServed: { "@type": "City", name: "Abuja", containedInPlace: { "@type": "Country", name: "Nigeria" } },
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: "Fo1 charlottes Adesiyan street",
+            addressLocality: "Abuja",
+            addressRegion: "Federal Capital Territory",
+            addressCountry: "NG",
+          },
+          contactPoint: [
+            {
+              "@type": "ContactPoint",
+              contactType: "sales",
+              telephone: "+2349134153272",
+              availableLanguage: ["English"],
+              areaServed: "NG",
+            },
+          ],
+          sameAs: ["https://www.instagram.com/peggies_events"],
+          founder: { "@type": "Person", name: "Peggy Adugba", jobTitle: "Certified Event Professional" },
+          knowsAbout: [
+            "Luxury event planning Abuja",
+            "Wedding decor Abuja",
+            "Corporate gala production",
+            "Milestone celebrations",
+          ],
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: "Service Offering",
+            itemListElement: SERVICES.map((s) => ({
+              "@type": "Offer",
+              itemOffered: { "@type": "Service", name: s.title, description: s.copy },
+            })),
+          },
+        }),
+      },
     ],
   }),
+
   component: Home,
 });
 
@@ -610,10 +670,18 @@ function SiteFooter() {
                   WhatsApp
                 </a>
               </li>
-              <li className="flex items-center gap-2">
-                <Instagram className="h-4 w-4" aria-hidden="true" />
-                @peggies_events
+              <li>
+                <a
+                  href="https://www.instagram.com/peggies_events"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 transition-colors hover:text-champagne"
+                >
+                  <Instagram className="h-4 w-4" aria-hidden="true" />
+                  @peggies_events
+                </a>
               </li>
+
               <li className="pt-2 leading-relaxed">
                 F01 Charlottes Adesiyan Street,
                 <br />
